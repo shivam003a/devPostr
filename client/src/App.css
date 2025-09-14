@@ -1,0 +1,130 @@
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #3c83f6;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 40px;
+}
+
+/* Force operators to never have background in Prism themes */
+.token.operator {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.animate-cs-bounce {
+  animation: bounce-cs 5s infinite both linear;
+}
+
+@keyframes bounce-cs {
+  0% {
+    transform: translateY(0px);
+  }
+  25% {
+    transform: translateY(-5px);
+  }
+  50% {
+    transform: translateY(0px);
+  }
+  75% {
+    transform: translateY(5px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.bg-grid {
+  background-color: #0a0c0f;
+  background-image:
+    linear-gradient(to right, #151720 1px, transparent 1px),
+    linear-gradient(to bottom, #151720 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+.no-border,
+textarea,
+pre {
+  outline: 0 !important;
+  border: 0 !important;
+}
+
+.random-animate {
+  animation: wobble 10s infinite both linear;
+}
+.random-animate-1 {
+  animation: wobble1 7s infinite both linear;
+}
+
+@keyframes wobble {
+  0% {
+    transform: translate(0%, 0%);
+  }
+  50% {
+    transform: translate(50%, 100%);
+  }
+  100% {
+    transform: translate(0%, 0%);
+  }
+}
+@keyframes wobble1 {
+  0% {
+    transform: translate(0%, 0%);
+  }
+  50% {
+    transform: translate(-20%, 80%);
+  }
+  100% {
+    transform: translate(0%, 0%);
+  }
+}
+
+.auth-input {
+  font-size: 14px;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.custom-checkbox {
+  width: 18px;
+  height: 18px;
+  background-color: #16171b;
+  appearance: none;
+  cursor: pointer;
+  position: relative;
+}
+
+.custom-checkbox:checked {
+  background-color: #16171b;
+}
+
+.custom-checkbox:checked::after {
+  content: "✓";
+  color: #3c83f6;
+  position: absolute;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

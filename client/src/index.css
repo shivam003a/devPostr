@@ -1,0 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-poppins: "Poppins", sans-serif;
+  --font-fira: "Fira Code", monospace;
+  --color-dark-blue: #0a0c0f;
+  --color-light-blue: #0e0f14;
+  --color-gray: #94a3b8;
+  --color-light-blue-1: hsl(217, 91%, 60%);
+  --color-light-blue-2: hsl(270, 75%, 65%);
+  --color-cs-red: #ff5f56;
+  --color-cs-yellow: #ffbd2e;
+  --color-cs-green: #27c93f;
+  --color-ocean: rgba(42, 123, 155, 1);
+  --color-mint: rgba(87, 199, 133, 1);
+  --color-sunshine: rgba(237, 221, 83, 1);
+}
