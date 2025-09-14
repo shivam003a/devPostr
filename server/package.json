@@ -6,6 +6,7 @@
     "type": "module",
     "scripts": {
         "start": "node index.js",
+        "worker": "node workers/twitterWorker.js",
         "dev": "nodemon index.js",
         "format": "prettier --write .",
         "format:check": "prettier --check ."
@@ -31,7 +32,7 @@
         "morgan": "^1.10.1",
         "multer": "^2.0.2",
         "nodemailer": "^7.0.5",
-        "openai": "^5.12.2",
+        "openai": "^5.20.2",
         "puppeteer": "^24.19.0",
         "twitter-api-v2": "^1.27.0",
         "zod": "^4.1.3"
