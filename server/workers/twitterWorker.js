@@ -180,6 +180,7 @@ const initBrowser = async () => {
     if (!browser || browserClosed) {
         browser = await puppeteer.launch({
             headless: true,
+            executablePath: puppeteer.executablePath(),
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
@@ -201,7 +202,7 @@ const restartBrowser = async () => {
         try {
             if (browser && !browserClosed) await browser.close();
         } catch (e) {
-            console.error("Error closing browser:", err);
+            console.error("Error closing browser:", e);
         }
         browser = null;
         jobCount = 0;
