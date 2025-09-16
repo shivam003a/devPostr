@@ -57,7 +57,7 @@ export default function CodeSnippetImage({ post, initialCode, onChange, isDashbo
         <div className="w-full h-full flex flex-col items-center justify-center gap-2 mb-8">
 
             {/* toolbar */}
-            <div className="w-full flex items-center justify-between gap-2">
+            <div className="w-full flex items-center justify-between gap-2 flex-wrap">
                 <div className="flex items-center justify-center gap-2">
                     {/* checkbox */}
                     {isDashboard &&
