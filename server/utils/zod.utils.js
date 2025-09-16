@@ -2,10 +2,14 @@ import { z } from 'zod'
 
 export const registerSchema = z.object({
     name: z
-        .string()
+        .string({
+            required_error: "name field is required",
+            invalid_type_error: "Not a string"
+        })
         .min(2, { message: "Name must be at least 2 characters long" })
         .max(100, { message: "Name must not exceed 50 characters" }),
     email: z
+        .string()
         .email({ message: "Please provide a valid email address" }),
     password: z
         .string()
@@ -15,6 +19,7 @@ export const registerSchema = z.object({
 
 export const loginSchema = z.object({
     email: z
+        .string()
         .email({ message: "Please provide a valid email address" }),
     password: z
         .string()
@@ -27,6 +32,7 @@ export const verifyOtpSchema = z.object({
         .string()
         .regex(/^[0-9a-fA-F]{24}$/, "_id must be a 24-char hex ObjectId"),
     email: z
+        .string()
         .email({ message: "Please provide a valid email address" }),
     otpCode: z
         .string()
