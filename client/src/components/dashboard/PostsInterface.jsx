@@ -11,6 +11,7 @@ function PostsInterface() {
     const { loading, batchesPosts } = useSelector(state => state.dashboard)
     const [posts, setPosts] = useState([])
     const [showScheduleBtn, setShowScheduleBtn] = useState(false)
+    const [scheduleLoading, setScheduleLoading] = useState(false)
 
     const dispatch = useDispatch();
     const location = useLocation();
@@ -30,13 +31,21 @@ function PostsInterface() {
     }
 
     const schedulePosts = async () => {
+        const toastId = toast.loading("Schdeuling Posts...")
+        setScheduleLoading(true)
+
         try {
             const response = await api.post('/api/schedule', { posts });
+            toast.dismiss(toastId);
             toast.success(response?.data?.message)
 
         } catch (e) {
+            toast.dismiss(toastId)
             toast.error(e?.response?.data?.message || "Something Went Wrong")
+        } finally {
+            setScheduleLoading(false)
         }
+
     }
 
     useEffect(() => {
@@ -94,10 +103,11 @@ function PostsInterface() {
 
                 {showScheduleBtn &&
                     <button
-                        className="fixed right-5 bottom-5 py-2 px-6 bg-gradient-to-tr from-light-blue-1 to-light-blue-2 text-black text-lg rounded-lg flex items-center gap-4 cursor-pointer shadow-[0px_0px_30px_5px_rgba(59,130,246,0.5)]"
+                        className="fixed right-5 bottom-5 p-1 w-24 h-8 bg-gradient-to-tr from-light-blue-1 to-light-blue-2 text-black text-md rounded-lg flex items-center justify-center gap-4 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                         onClick={schedulePosts}
+                        disabled={scheduleLoading}
                     >
-                        Schedule
+                        {scheduleLoading ? (<Loader size={18} color="#000" className="animate-spin" />) : "Schedule"}
                     </button>
                 }
             </div>

@@ -36,7 +36,7 @@ const worker = new Worker('twitter_posts', async (job) => {
             console.error("User Not Found for job:", job?.id)
             throw new Error(`[Job ${job.id}] User not found: postId=${postId}, batchId=${batchId}, userId=${userId}`);
         }
-        if (!user?.twitterAccessSecret || !user?.twitterAccessToken) {
+        if (!user?.twitterAccessSecret || !user?.twitterAccessToken || !user?.isTwitterConnected) {
             console.error("Twitter not connected for job:", job?.id)
             throw new Error(`[Job ${job.id}] Twitter not connected: postId=${postId}, batchId=${batchId}, userId=${userId}`);
         }

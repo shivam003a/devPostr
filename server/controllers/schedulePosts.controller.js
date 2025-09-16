@@ -19,7 +19,7 @@ export const schedulePosts = async (req, res) => {
         if (!user) {
             return res.error("User not found", null, 404)
         }
-        if (!user.twitterAccessSecret || !user.twitterAccessToken) {
+        if (!user.twitterAccessSecret || !user.twitterAccessToken || !user.isTwitterConnected) {
             return res.error("Connect Twitter to post", null, 400)
         }
 
