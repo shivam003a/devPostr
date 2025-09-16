@@ -96,7 +96,7 @@ export const otpEmailTemplate = (otpCode) => `
           <div style="text-align: center">
             &copy; 2025 DevPostr. All rights reserved.
           </div>
-          <a href="#" style="color: #0d6efd; text-decoration: none"
+          <a href="https://devpostr.vercel.app/" style="color: #0d6efd; text-decoration: none"
             >Visit Site</a
           >
         </div>
@@ -192,7 +192,7 @@ export const welcomeEmailTemplate = (name) => `
         >
           If you have any questions, feel free to
           <a
-            href="{{SUPPORT_LINK}}"
+            href="mailto:devpostr@gmail.com"
             style="color: #0d6efd; text-decoration: none"
             >contact us</a
           >.
@@ -211,7 +211,7 @@ export const welcomeEmailTemplate = (name) => `
           <div style="text-align: center">
             &copy; 2025 DevPostr. All rights reserved.
           </div>
-          <a href="{{SITE_LINK}}" style="color: #0d6efd; text-decoration: none"
+          <a href="https://devpostr.vercel.app/" style="color: #0d6efd; text-decoration: none"
             >Visit Site</a
           >
         </div>
