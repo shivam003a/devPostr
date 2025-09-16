@@ -1,4 +1,4 @@
-import { WandSparkles, Palette, Instagram, Zap, Code, TabletSmartphone } from 'lucide-react'
+import { WandSparkles, Palette, Twitter, Zap, Code, TabletSmartphone } from 'lucide-react'
 
 export const features = [
     {
@@ -9,15 +9,15 @@ export const features = [
     },
     {
         bgColor: '#d650b1',
-        title: 'Premium Templates',
-        description: 'Beautiful, customizable templates with syntax highlighting and professional design themes.',
+        title: 'Premium Template',
+        description: 'Beautiful, customizable template with syntax highlighting and professional design theme.',
         icon: Palette
     },
     {
         bgColor: '#ec4673',
-        title: 'Instagram Optimized',
-        description: 'Perfect aspect ratios and formatting specifically designed for Instagram\'s platform requirements.',
-        icon: Instagram
+        title: 'Twitter Optimized',
+        description: 'Perfect aspect ratios and formatting specifically designed for X\'s (formerly Twitter) platform requirements.',
+        icon: Twitter
     },
     {
         bgColor: '#eba809',

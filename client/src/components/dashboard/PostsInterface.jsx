@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { batch, useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { getBatchesPosts } from "../../redux/slices/dashboard.slice";
 import CodeSnippetImage from "../common/CodeSnippetImage";
@@ -66,21 +66,28 @@ function PostsInterface() {
                 {loading ? (
                     <Loader size={22} strokeWidth={1} color="#fff" className="animate-spin" />
                 ) : (
-                    <div className={`w-full h-full max-w-[996px] grid grid-cols-1 lg:grid-cols-2 gap-4 p-4 items-stretch`}>
+                    <div className={`w-full h-full max-w-[996px] grid grid-cols-1 lg:grid-cols-2 space-x-4 space-y-8 p-4 items-stretch`}>
                         {
                             batchesPosts && batchesPosts?.length > 0 ? (
                                 batchesPosts.map((post, index) => (
-                                    <CodeSnippetImage
-                                        post={post}
-                                        langauge={post?.langauge}
-                                        correctAns={post?.correctAns}
-                                        explaination={post?.explaination}
-                                        key={post?._id}
-                                        isDashboard={true}
-                                        onChange={(e) => handleSelectedPost(e, index)}
-                                    />
+                                    <div className="relative">
+                                        <span className="absolute right-0 bottom-0 bg-dark-blue p-2 text-white text-xs font-poppins rounded-tl-lg">{post?.status || "not_scheduled"}</span>
+                                        <CodeSnippetImage
+                                            post={post}
+                                            langauge={post?.langauge}
+                                            correctAns={post?.correctAns}
+                                            explaination={post?.explaination}
+                                            key={post?._id}
+                                            isDashboard={true}
+                                            onChange={(e) => handleSelectedPost(e, index)}
+                                        />
+                                    </div>
                                 ))
-                            ) : (<span className="w-full text-gray-400 text-md font-poppins text-center">No posts found</span>)
+                            ) : (
+                                <div className="w-full h-full col-span-full flex items-center justify-center">
+                                    <span className="text-gray-400 text-md font-poppins text-center">No posts found</span>
+                                </div>
+                            )
                         }
                     </div>
                 )}

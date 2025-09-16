@@ -66,6 +66,7 @@ export const disconnectTwitter = async (req, res) => {
         }
         user.twitterAccessSecret = null;
         user.twitterAccessToken = null;
+        user.isTwitterConnected = false;
         await user.save();
 
         return res.success("Twitter Disconnected!", null, 200);

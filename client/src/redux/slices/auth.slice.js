@@ -76,7 +76,9 @@ const authSlice = createSlice({
         otpInfo: storedOtpInfo ? JSON.parse(storedOtpInfo) : null
     },
     reducers: {
-
+        setUser: (state, action) => {
+            state.user = action.payload
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -220,4 +222,5 @@ const authSlice = createSlice({
     }
 })
 
+export const { setUser } = authSlice.actions;
 export default authSlice.reducer

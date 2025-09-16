@@ -1,4 +1,4 @@
-import { Sparkles, ArrowRight, Code, Instagram } from "lucide-react"
+import { Sparkles, ArrowRight, Code, Twitter } from "lucide-react"
 import { useEffect, useState } from "react"
 import { NavLink } from "react-router-dom"
 import { useSelector } from "react-redux"
@@ -53,7 +53,7 @@ function Hero() {
                     >
                         Code Snippets
                     </motion.h1>
-                    <p className="font-poppins text-lg text-gray text-center max-w-[90%] sm:max-w-[65%]">Transform your code into stunning visual content for Instagram with AI-powered generation and premium design templates</p>
+                    <p className="font-poppins text-lg text-gray text-center max-w-[90%] sm:max-w-[65%]">Transform your code into stunning visual content for Twitter with AI-powered generation and premium design templates</p>
 
                     {/* cta */}
                     <div className="flex gap-4 items-center justify-center flex-wrap">
@@ -79,9 +79,9 @@ function Hero() {
                         </div>
                         <div className="flex gap-2 items-center justify-center">
                             <div className="p-2 rounded-xl bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)]">
-                                <Instagram color="#3c83f6" size={18} />
+                                <Twitter color="#3c83f6" size={18} />
                             </div>
-                            <span className="font-poppins text-gray text-sm">Instagram Ready</span>
+                            <span className="font-poppins text-gray text-sm">Twitter Ready</span>
                         </div>
                         <div className="flex gap-2 items-center justify-center">
                             <div className="p-2 rounded-xl bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)]">

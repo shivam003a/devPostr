@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate, NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { getBatches } from "../../redux/slices/dashboard.slice.js";
-import { logout } from '../../redux/slices/auth.slice.js'
+import { logout, setUser } from '../../redux/slices/auth.slice.js'
 import toast from 'react-hot-toast'
 import api from "../../lib/axiosInstance.js";
 import * as Popover from '@radix-ui/react-popover'
@@ -76,7 +76,10 @@ function Sidebar() {
     const handleTwiiterAuthDisconnect = async () => {
         try {
             const response = await api.post('/api/twitter/disconnect')
+
+            dispatch(setUser({ ...user, isTwitterConnected: false, }))
             toast.success("Twiiter Disconnected!")
+            window.open('https://x.com/settings/connected_apps', '_blank', 'noopener,noreferrer')
 
         } catch (e) {
             toast.error(e?.response?.data?.message)
@@ -251,6 +254,7 @@ function Sidebar() {
 
                 <Modal
                     headerTitle={'Search'}
+                    subHeaderTitle={"Type a batch name or keyword to get started"}
                     open={open}
                     setOpen={setOpen}
                     verticalAlign='items-start pt-20'
@@ -264,7 +268,7 @@ function Sidebar() {
                             onChange={(e) => setSearchText(e?.target?.value)}
                         />
 
-                        <div className='flex-1 flex flex-col h-full gap-2 overflow-x-hidden overflow-y-auto style-scrollbar pb-3'>
+                        <div className='flex-1 flex flex-col h-full gap-2 overflow-x-hidden overflow-y-auto style-scrollbar pb-3 mt-2'>
                             {Array.isArray(searchBatches) && searchBatches.length > 0 ? (
                                 searchBatches.map((batch) => (
                                     <div

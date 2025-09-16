@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
 import { toPng } from 'html-to-image'
-import { Languages, Download } from 'lucide-react'
+import { Code, Download } from 'lucide-react'
 import { SketchPicker } from 'react-color'
 import * as Popover from '@radix-ui/react-popover';
 import { js as js_beautify } from 'js-beautify';
@@ -41,7 +41,7 @@ export default function CodeSnippetImage({ post, initialCode, onChange, isDashbo
     }, []);
 
     useEffect(() => {
-        prismLanguages[language]()
+        prismLanguages[language] ? prismLanguages[language]() : prismLanguages["javascript"]()
     }, [language])
 
     useEffect(() => {
@@ -61,14 +61,18 @@ export default function CodeSnippetImage({ post, initialCode, onChange, isDashbo
                 <div className="flex items-center justify-center gap-2">
                     {/* checkbox */}
                     {isDashboard &&
-                        <div className="flex items-center justify-center gap-2 border border-light-blue-1 p-1">
+                        <div
+                            className="flex items-center justify-center gap-2 border border-light-blue-1 p-1"
+                            style={post?.status === 'posted' || post?.status === 'scheduled' ? { opacity: "50%" } : {}}
+                        >
                             <input
                                 type="checkbox"
                                 name="postSelector"
-                                className="custom-checkbox"
+                                className="custom-checkbox disabled:opacity-50"
                                 value={selected}
                                 checked={selected}
                                 onChange={(e) => setSelected(e?.target?.checked)}
+                                disabled={post?.status === 'posted' || post?.status === 'scheduled'}
                             />
                         </div>
                     }
@@ -76,7 +80,7 @@ export default function CodeSnippetImage({ post, initialCode, onChange, isDashbo
                     {/* datetimepicker */}
                     {isDashboard &&
                         <div className="h-7 flex items-center justify-center gap-2 border border-light-blue-1 p-1 disabled:opacity-0"
-                            style={!selected ? { opacity: '0.6' } : {}}
+                            style={post?.status === 'posted' || post?.status === 'scheduled' || !selected ? { opacity: '0.6' } : {}}
                         >
                             <DatePicker
                                 selected={scheduledAt}
@@ -86,7 +90,7 @@ export default function CodeSnippetImage({ post, initialCode, onChange, isDashbo
                                 timeIntervals={10}
                                 dateFormat="yyyy-MM-dd HH:mm"
                                 placeholderText="Select Time"
-                                disabled={!selected}
+                                disabled={post?.status === 'posted' || post?.status === 'scheduled' || !selected}
                                 className="text-sm text-light-blue-1 font-light !border-0 !outline-0 cursor-pointer disabled:opacity-60 disabled:pointer-events-none"
                             />
                         </div>
@@ -96,7 +100,7 @@ export default function CodeSnippetImage({ post, initialCode, onChange, isDashbo
                     {
                         !isDashboard &&
                         <div className="flex items-center justify-center gap-2 border border-light-blue-1 p-1">
-                            <Languages size={14} color="#3c83f6" strokeWidth={1} />
+                            <Code size={14} color="#3c83f6" strokeWidth={1} />
                             <select
                                 className="text-sm text-light-blue-1 font-light !border-0 !outline-0 cursor-pointer"
                                 value={language}
@@ -122,10 +126,11 @@ export default function CodeSnippetImage({ post, initialCode, onChange, isDashbo
                             style={{ backgroundColor: `rgba(${color.r}, ${color.g},${color.b},${color.a})` }}
                         />
                         <Popover.Content
-                            className="absolute z-50 mt-2"
                             avoidCollisions={true}
                             onOpenAutoFocus={(e) => e.preventDefault()}
                             align="start"
+                            side="left"
+                            sideOffset={4}
                         >
                             <SketchPicker color={color} onChange={(e) => setColor(e?.rgb)} />
                         </Popover.Content>
@@ -138,10 +143,11 @@ export default function CodeSnippetImage({ post, initialCode, onChange, isDashbo
                             style={{ backgroundColor: `rgba(${codeColor.r}, ${codeColor.g},${codeColor.b},${codeColor.a})` }}
                         />
                         <Popover.Content
-                            className="absolute z-50 mt-2"
                             avoidCollisions={true}
                             onOpenAutoFocus={(e) => e.preventDefault()}
                             align="start"
+                            side="left"
+                            sideOffset={4}
                         >
                             <SketchPicker color={codeColor} onChange={(e) => setCodeColor(e?.rgb)} />
                         </Popover.Content>

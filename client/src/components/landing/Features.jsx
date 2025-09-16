@@ -20,7 +20,7 @@ function Features() {
                             size={18}
                         />
                         <span className="text-xs text-white font-semibold font-poppins">
-                            Why Choose CodeSnap AI
+                            Why Choose <span className="text-light-blue-1">devPostr</span>
                         </span>
                     </span>
 
@@ -28,7 +28,7 @@ function Features() {
                     <div className="flex flex-col justify-center items-center">
                         <h2 className="text-light-blue-1 font-poppins text-4xl font-bold tracking-wide mt-2 leading-10 text-center">Everything You Need to Create</h2>
                         <h2 className="text-white font-poppins text-4xl font-bold tracking-wide mt-2 leading-10 text-center">Stunning Code Content</h2>
-                        <p className="max-w-[90%] sm:max-w-[65%] text-md mt-2 text-gray font-poppins text-center">From AI-powered generation to Instagram-ready exports, we've built the ultimate toolkit for sharing code</p>
+                        <p className="max-w-[90%] sm:max-w-[65%] text-md mt-2 text-gray font-poppins text-center">From AI-powered generation to Twitter-ready exports, we've built the ultimate toolkit for sharing code</p>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 w-full gap-6 mt-8">

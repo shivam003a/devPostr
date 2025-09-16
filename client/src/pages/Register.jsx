@@ -115,7 +115,7 @@ function Register() {
                                 {errors.password && <p className="text-red-500 text-xs -mt-1">{errors.password}</p>}
                             </div>
 
-                            <button className="w-full rounded-md mt-4 text-md font-semibold p-1 bg-gradient-to-tl from-light-blue-1 to-light-blue-2 disabled:bg-light-blue-1/80 cursor-pointer" disabled={loading}>{loading ? <Loader size={22} strokeWidth={1} className="animate-spin mx-auto" /> : "Get Started"}</button>
+                            <button className="w-full rounded-md mt-4 text-md font-semibold p-1 bg-gradient-to-tl from-light-blue-1 to-light-blue-2 disabled:bg-light-blue-1/80 cursor-pointer" disabled={loading}>{loading ? <Loader size={22} strokeWidth={1} className="animate-spin mx-auto" /> : "Register"}</button>
                         </form>
 
                         <p className="text-gray-400 text-sm text-center mt-4">
