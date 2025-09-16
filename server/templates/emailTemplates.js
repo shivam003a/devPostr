@@ -29,7 +29,7 @@ export const otpEmailTemplate = (otpCode) => `
     >
       <h1
         style="
-          background-color: #7dd181;
+          background-color: #3c83f6;
           padding: 8px;
           text-align: center;
           color: #f5f5f4;
@@ -62,7 +62,7 @@ export const otpEmailTemplate = (otpCode) => `
               background-color: #f0f0f0;
               padding: 15px 30px;
               border-radius: 8px;
-              color: #7dd181;
+              color: #3c83f6;
               text-align: center;
             "
           >
@@ -136,7 +136,7 @@ export const welcomeEmailTemplate = (name) => `
     >
       <h1
         style="
-          background-color: #7dd181;
+          background-color: #3c83f6;
           padding: 8px;
           text-align: center;
           color: #f5f5f4;
@@ -163,12 +163,12 @@ export const welcomeEmailTemplate = (name) => `
 
         <div style="width: 100%; text-align: center">
           <a
-            href="{{LOGIN_LINK}}"
+            href="https://devpostr.vercel.app/dashboard"
             style="
               display: inline-block;
               font-size: 16px;
               font-weight: bold;
-              background-color: #7dd181;
+              background-color: #3c83f6;
               color: #ffffff;
               padding: 15px 30px;
               border-radius: 8px;
