@@ -53,7 +53,7 @@ export const schedulePosts = async (req, res) => {
             // if found, add to bullMQ
             const job = await twitterQueue.add('twitter_code_snnippet', { postId, batchId, userId }, {
                 jobId: postId,
-                delay: delay > 0 ? 0 : 0,
+                delay: delay > 0 ? delay : 0,
                 removeOnComplete: { age: 3600, count: 100 },
                 removeOnFail: { age: 7 * 24 * 3600, count: 50 },
                 attempts: 3,
