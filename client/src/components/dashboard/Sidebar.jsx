@@ -222,8 +222,9 @@ function Sidebar() {
                                 sideOffset={6}
                                 align="start"
                                 alignOffset={2}
+                                className="z-100"
                             >
-                                <div className="bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)] backdrop-blur-xl flex flex-col p-1 rounded-md">
+                                <div className="bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)] backdrop-blur-xl flex flex-col p-1 rounded-md z-100">
                                     <button
                                         className="w-full text-white text-sm hover:bg-dark-blue p-2 rounded-md cursor-pointer disabled:cursor-not-allowed"
                                         onClick={handleTwiiterAuth}
