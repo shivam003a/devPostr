@@ -17,7 +17,6 @@ function Register() {
 
     const handleUserInput = (e) => {
         const { name, value } = e?.target;
-        console.log(name, value)
 
         setUser(prev => ({
             ...prev, [name]: value
@@ -33,7 +32,6 @@ function Register() {
             parsed.error.issues?.map((err) => {
                 fieldErrors[err.path[0]] = err?.message
             })
-            console.log(fieldErrors)
             setErrors(fieldErrors)
             return;
         }

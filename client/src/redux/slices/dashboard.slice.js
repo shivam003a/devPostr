@@ -29,7 +29,6 @@ export const generatePosts = createAsyncThunk('dashboard/generatePosts', async (
         return response?.data?.data?.batch;
     } catch (e) {
         const message = e?.response?.data?.message || "Something Went Wrong"
-        console.log("error", e)
         return thunkAPI.rejectWithValue(message)
     }
 })

@@ -29,7 +29,6 @@ function OTPInput({ length = 4, onChange }) {
 
     const handlePaste = (e) => {
         e.preventDefault();
-        console.log(e)
         const pasteData = e.clipboardData.getData("Text").slice(0, length);
         if (!/^[0-9]+$/.test(pasteData)) return;
 

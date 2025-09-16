@@ -20,7 +20,6 @@ function Login() {
 
     const handleUserInput = (e) => {
         const { name, value } = e?.target;
-        console.log(name, value)
 
         setUser(prev => ({
             ...prev, [name]: value
@@ -36,7 +35,6 @@ function Login() {
             parsed.error.issues?.map((err) => {
                 fieldErrors[err.path[0]] = err?.message
             })
-            console.log(fieldErrors)
             setErrors(fieldErrors)
             return;
         }

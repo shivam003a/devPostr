@@ -27,7 +27,6 @@ function PostsInterface() {
             codeColor: e?.codeColor
         }
         setPosts(updatedPost)
-        console.log(updatedPost)
     }
 
     const schedulePosts = async () => {

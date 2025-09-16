@@ -6,7 +6,6 @@ export default function Modal({ children, open, setOpen, headerTitle, verticalAl
     useEffect(() => {
         const handleEsc = (e) => {
             if (e?.key === 'Escape') {
-                console.log('clicked')
                 setOpen(false)
             }
         }

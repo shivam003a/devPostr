@@ -45,7 +45,6 @@ export default function CodeSnippetImage({ post, initialCode, onChange, isDashbo
     }, [language])
 
     useEffect(() => {
-        console.log(new Date(post?.scheduledAt).toLocaleString())
         onChange({
             codeColor,
             color,
