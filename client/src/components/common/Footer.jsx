@@ -28,16 +28,16 @@ function Footer() {
                 {/* Other Projects */}
                 <div className="flex flex-col gap-3 flex-1">
                     <span className="text-light-blue-1 text-sm font-poppins font-semibold">Other Projects</span>
-                    <NavLink to="https://pdftalk-psi.vercel.app/" target="_blank" className="flex items-center text-xs text-gray hover:text-white gap-1 transition-colors">
+                    <NavLink to="https://pdftalk-psi.vercel.app/" target="_blank" className="flex items-center text-xs text-gray hover:text-white gap-1 transition-colors w-fit">
                         PdfTalk <ExternalLink size={14} color="#3c83f6" />
                     </NavLink>
-                    <NavLink to="https://snapshort.vercel.app/" target="_blank" className="flex items-center text-xs text-gray hover:text-white gap-1 transition-colors">
+                    <NavLink to="https://snapshort.vercel.app/" target="_blank" className="flex items-center text-xs text-gray hover:text-white gap-1 transition-colors w-fit">
                         SnapShort <ExternalLink size={14} color="#3c83f6" />
                     </NavLink>
-                    <NavLink to="https://resumefreshers.vercel.app/" target="_blank" className="flex items-center text-xs text-gray hover:text-white gap-1 transition-colors">
+                    <NavLink to="https://resumefreshers.vercel.app/" target="_blank" className="flex items-center text-xs text-gray hover:text-white gap-1 transition-colors w-fit">
                         ResumeCraft <ExternalLink size={14} color="#3c83f6" />
                     </NavLink>
-                    <NavLink to="https://vidnexa.netlify.app/" target="_blank" className="flex items-center text-xs text-gray hover:text-white gap-1 transition-colors">
+                    <NavLink to="https://vidnexa.netlify.app/" target="_blank" className="flex items-center text-xs text-gray hover:text-white gap-1 transition-colors w-fit">
                         VidNexa <ExternalLink size={14} color="#3c83f6" />
                     </NavLink>
                 </div>
@@ -48,16 +48,16 @@ function Footer() {
                 {/* Contact */}
                 <div className="flex flex-col gap-3 flex-1">
                     <span className="text-light-blue-1 text-sm font-poppins font-semibold">Contact</span>
-                    <NavLink to="https://www.instagram.com/shivam003a/" target="_blank" className="flex items-center text-xs text-gray hover:text-white gap-1 transition-colors">
+                    <NavLink to="https://www.instagram.com/shivam003a/" target="_blank" className="flex items-center text-xs text-gray hover:text-white gap-1 transition-colors w-fit">
                         <Instagram size={14} color="#3c83f6" /> Instagram
                     </NavLink>
-                    <NavLink to="https://x.com/shivam003a" target="_blank" className="flex items-center text-xs text-gray hover:text-white gap-1 transition-colors">
+                    <NavLink to="https://x.com/shivam003a" target="_blank" className="flex items-center text-xs text-gray hover:text-white gap-1 transition-colors w-fit">
                         <Twitter size={14} color="#3c83f6" /> Twitter
                     </NavLink>
-                    <NavLink to="https://www.linkedin.com/in/shivam003a" target="_blank" className="flex items-center text-xs text-gray hover:text-white gap-1 transition-colors">
+                    <NavLink to="https://www.linkedin.com/in/shivam003a" target="_blank" className="flex items-center text-xs text-gray hover:text-white gap-1 transition-colors w-fit">
                         <Linkedin size={14} color="#3c83f6" /> LinkedIn
                     </NavLink>
-                    <NavLink to="https://www.github.com/shivam003a" target="_blank" className="flex items-center text-xs text-gray hover:text-white gap-1 transition-colors">
+                    <NavLink to="https://www.github.com/shivam003a" target="_blank" className="flex items-center text-xs text-gray hover:text-white gap-1 transition-colors w-fit">
                         <Github size={14} color="#3c83f6" /> Github
                     </NavLink>
                 </div>

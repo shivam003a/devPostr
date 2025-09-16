@@ -59,14 +59,19 @@ function Hero() {
                     <div className="flex gap-4 items-center justify-center flex-wrap">
                         <NavLink
                             to={isAuthenticated ? "/dashboard" : "/register"}
-                            className="py-3 px-8 bg-gradient-to-tr from-light-blue-1 to-light-blue-2 text-black text-lg rounded-lg flex items-center gap-4 cursor-pointer shadow-[0px_0px_30px_5px_rgba(59,130,246,0.5)]"
+                            className="py-3 px-8 bg-gradient-to-tr from-light-blue-1 to-light-blue-2 text-black text-lg rounded-lg flex items-center gap-4 cursor-pointer shadow-[0px_0px_30px_5px_rgba(59,130,246,0.5)] hover:shadow-[0px_0px_34px_8px_rgba(59,130,246,0.5)]"
                         >
                             <span className="text-sm font-poppins font-semibold">Start Creating</span> <ArrowRight color="#000000" size={18} />
                         </NavLink>
-                        <button className="py-3 px-8 bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)] text-black text-lg rounded-lg flex items-center gap-4 cursor-pointer hover:bg-[rgba(255,255,255,0.2)] transition-all duration-200">
+                        <NavLink
+                            to={'https://www.notion.so/Getting-Started-with-devPostr-2703e5570deb80a1807efb3fe4f21727?source=copy_link'}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="py-3 px-8 bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)] text-black text-lg rounded-lg flex items-center gap-4 cursor-pointer hover:bg-[rgba(255,255,255,0.2)] transition-all duration-200"
+                        >
                             <Code color="#ffffff" size={18} />
                             <span className="text-sm font-poppins font-semibold text-white">View Examples</span>
-                        </button>
+                        </NavLink>
                     </div>
 
                     {/* feature */}
