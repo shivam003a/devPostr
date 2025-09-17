@@ -1,6 +1,7 @@
 import twitterQueue from "../lib/queue.js";
 import Post from "../models/post.models.js";
 import User from '../models/user.models.js'
+import { TwitterApi } from 'twitter-api-v2'
 
 export const schedulePosts = async (req, res) => {
     try {
@@ -22,10 +23,17 @@ export const schedulePosts = async (req, res) => {
         if (!user.twitterAccessSecret || !user.twitterAccessToken || !user.isTwitterConnected) {
             return res.error("Connect Twitter to post", null, 400)
         }
+        const tempClient = new TwitterApi({
+            appKey: process?.env?.X_API_KEY,
+            appSecret: process?.env?.X_API_KEY_SECRET,
+            accessToken: user?.twitterAccessToken,
+            accessSecret: user?.twitterAccessSecret
+        })
+        await tempClient.v1.verifyCredentials();
 
         // Get Valid posts
         const validPosts = postToSchedule?.filter(post => (
-            post?.selected && post?.scheduledAt && post?.status === 'not_scheduled'
+            post?.scheduledAt && (post?.status === 'not_scheduled' || post?.status === 'failed')
         ))
 
         if (validPosts?.length === 0) {
@@ -39,7 +47,7 @@ export const schedulePosts = async (req, res) => {
                 _id: postId,
                 createdBy: userId,
                 batch: batchId,
-                status: "not_scheduled"
+                status: { $in: ["not_scheduled", "failed"] }
             })
             if (!updatedPost) {
                 throw new Error(`Post not found or already scheduled: ${postId}`)
@@ -51,6 +59,7 @@ export const schedulePosts = async (req, res) => {
             const delay = new Date(scheduledAt).getTime() - Date.now()
 
             // if found, add to bullMQ
+            await twitterQueue.remove(postId)
             const job = await twitterQueue.add('twitter_code_snnippet', { postId, batchId, userId }, {
                 jobId: postId,
                 delay: delay > 0 ? delay : 0,
@@ -85,6 +94,9 @@ export const schedulePosts = async (req, res) => {
 
     } catch (e) {
         console.error("Error Scheduling Posts", e)
+        if (e?.error && e?.errors[0]?.code == '89') {
+            return res.error("Invalid or expired twitter token", null, 401)
+        }
         return res.error("Scheduling Posts Failed", null, 500)
     }
 }

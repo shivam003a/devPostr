@@ -27,7 +27,7 @@ export default function CodeSnippetImage({ post, initialCode, onChange, isDashbo
 
         toPng(downloadRef?.current, {
             cacheBust: true,
-            pixelRatio: 1
+            pixelRatio: 4
         })
             .then((dataURL) => {
                 const link = document.createElement("a");
@@ -54,7 +54,7 @@ export default function CodeSnippetImage({ post, initialCode, onChange, isDashbo
     }, [selected, codeColor, color, scheduledAt])
 
     return (
-        <div className="w-full h-full flex flex-col items-center justify-center gap-2 mb-8">
+        <div className="w-full h-full flex flex-col items-center justify-center gap-2">
 
             {/* toolbar */}
             <div className="w-full flex items-center justify-between gap-2 flex-wrap">

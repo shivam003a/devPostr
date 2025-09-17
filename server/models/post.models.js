@@ -28,7 +28,7 @@ const postSchema = new mongoose.Schema({
     status: {
         type: String,
         default: "not_scheduled",
-        enum: ["not_scheduled", "scheduled", "posted"]
+        enum: ["not_scheduled", "scheduled", "posted", "failed"]
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,

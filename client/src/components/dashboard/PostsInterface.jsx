@@ -75,23 +75,30 @@ function PostsInterface() {
                 {loading ? (
                     <Loader size={22} strokeWidth={1} color="#fff" className="animate-spin" />
                 ) : (
-                    <div className={`w-full h-full max-w-[996px] grid grid-cols-1 lg:grid-cols-2 space-x-4 space-y-8 p-4 items-stretch`}>
+                    <div className="w-full h-full max-w-[996px] grid grid-cols-1 lg:grid-cols-2 p-2 items-stretch space-x-4 space-y-8 relative mb-4">
                         {
                             batchesPosts && batchesPosts?.length > 0 ? (
-                                batchesPosts.map((post, index) => (
-                                    <div className="relative">
-                                        <span className="absolute right-0 bottom-0 bg-dark-blue p-2 text-white text-xs font-poppins rounded-tl-lg">{post?.status || "not_scheduled"}</span>
-                                        <CodeSnippetImage
-                                            post={post}
-                                            langauge={post?.langauge}
-                                            correctAns={post?.correctAns}
-                                            explaination={post?.explaination}
-                                            key={post?._id}
-                                            isDashboard={true}
-                                            onChange={(e) => handleSelectedPost(e, index)}
-                                        />
-                                    </div>
-                                ))
+                                batchesPosts.map((post, index) => {
+                                    const hashtags = post?.hashtags?.split(',').map((tag) => `#${tag}`).join(' ')
+                                    const caption = post?.caption + "\n\n" + hashtags;
+
+                                    return (
+                                        <div className="relative flex flex-col p-1" key={post?._id}>
+                                            <div className="relative h-full w-full">
+                                                <span className="absolute right-0 bottom-0 bg-dark-blue p-2 text-white text-xs font-poppins">{post?.status || "not_scheduled"}</span>
+                                                <CodeSnippetImage
+                                                    post={post}
+                                                    langauge={post?.langauge}
+                                                    correctAns={post?.correctAns}
+                                                    explaination={post?.explaination}
+                                                    isDashboard={true}
+                                                    onChange={(e) => handleSelectedPost(e, index)}
+                                                />
+                                            </div>
+                                            <div className="font-poppins text-[13px] font-light text-gray whitespace-pre-line border border-t-0 p-1 border-light-blue-1">{caption}</div>
+                                        </div>
+                                    )
+                                })
                             ) : (
                                 <div className="w-full h-full col-span-full flex items-center justify-center">
                                     <span className="text-gray-400 text-md font-poppins text-center">No posts found</span>

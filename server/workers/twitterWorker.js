@@ -40,6 +40,13 @@ const worker = new Worker('twitter_posts', async (job) => {
             console.error("Twitter not connected for job:", job?.id)
             throw new Error(`[Job ${job.id}] Twitter not connected: postId=${postId}, batchId=${batchId}, userId=${userId}`);
         }
+        const userClient = new TwitterApi({
+            appKey: process?.env?.X_API_KEY,
+            appSecret: process?.env?.X_API_KEY_SECRET,
+            accessToken: user?.twitterAccessToken,
+            accessSecret: user?.twitterAccessSecret,
+        });
+        await userClient.v1.verifyCredentials();
 
         // Check for Post
         const post = await Post.findOne({
@@ -72,13 +79,6 @@ const worker = new Worker('twitter_posts', async (job) => {
         let codeTweet = null;
         let explainationMediaId = null;
         let explainationTweet = null;
-
-        const userClient = new TwitterApi({
-            appKey: process.env.X_API_KEY,
-            appSecret: process.env.X_API_KEY_SECRET,
-            accessToken: user.twitterAccessToken,
-            accessSecret: user.twitterAccessSecret,
-        });
 
         // Initiate Tweets
         if (codeData?.status === 'fulfilled') {
@@ -118,7 +118,14 @@ const worker = new Worker('twitter_posts', async (job) => {
         return `Tweeted Sucessfully with tweetId: ${codeTweet?.data?.id}, postId: ${postId}`
 
     } catch (e) {
-        console.error(`[Job ${job.id}] Failed: postId=${postId}, batchId=${batchId}, userId=${userId} - Error: ${e.message}`);
+        try { await Post.findByIdAndUpdate(postId, { status: 'failed' }, { new: true }) }
+        catch (err) { throw err; }
+
+        if (e?.error && e?.errors[0].code == '89') {
+            console.error(`[Job ${job.id}] Failed: postId=${postId}, batchId=${batchId}, userId=${userId} - Error: ${e.errors[0].message}`);
+        } else {
+            console.error(`[Job ${job.id}] Failed: postId=${postId}, batchId=${batchId}, userId=${userId} - Error: ${e.message}`);
+        }
         throw e;
     }
 
