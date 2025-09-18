@@ -1,4 +1,4 @@
-import { Code, Loader, LogOut, PanelRight, Search, SquarePlus, Trash, EllipsisVertical } from "lucide-react";
+import { Code, Loader, LogOut, PanelRight, Search, SquarePlus, Trash, EllipsisVertical, Link, Unlink } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
@@ -226,22 +226,27 @@ function Sidebar() {
                             >
                                 <div className="bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)] backdrop-blur-xl flex flex-col p-1 rounded-md z-100">
                                     <button
-                                        className="w-full text-white text-sm hover:bg-dark-blue p-2 rounded-md cursor-pointer disabled:cursor-not-allowed"
+                                        className="w-full text-white text-sm hover:bg-dark-blue p-2 rounded-md cursor-pointer disabled:cursor-not-allowed  flex items-center gap-2"
                                         onClick={handleTwiiterAuth}
                                         disabled={user?.isTwitterConnected}
                                     >
+                                        <Link size={16} />
                                         {user?.isTwitterConnected ? "Twitter Connected" : "Connect Twitter"}
                                     </button>
                                     {user?.isTwitterConnected &&
                                         <button
-                                            className="w-full text-white text-sm hover:bg-dark-blue p-2 rounded-md cursor-pointer"
+                                            className="w-full text-white text-sm hover:bg-dark-blue p-2 rounded-md cursor-pointer  flex items-center gap-2"
                                             onClick={handleTwiiterAuthDisconnect}
                                         >
+                                            <Unlink size={16} />
                                             Disconnect Twitter
                                         </button>
                                     }
                                     <div className="w-full border-b-1 border-[rgba(255,255,255,0.2)]"></div>
-                                    <div className="w-full text-white text-sm p-2 rounded-md cursor-pointer hover:bg-dark-blue" onClick={hnadleLogout}>Logout</div>
+                                    <div className="w-full text-white text-sm p-2 rounded-md cursor-pointer hover:bg-dark-blue flex items-center gap-2" onClick={hnadleLogout}>
+                                        <LogOut size={16} />
+                                        Logout
+                                    </div>
                                 </div>
                             </Popover.Content>
                         </Popover.Root>

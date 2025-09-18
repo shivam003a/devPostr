@@ -94,7 +94,7 @@ export const schedulePosts = async (req, res) => {
 
     } catch (e) {
         console.error("Error Scheduling Posts", e)
-        if (e?.error && e?.errors[0]?.code == '89') {
+        if (e?.error && e?.errors && e?.errors?.[0]?.code == '89') {
             return res.error("Invalid or expired twitter token", null, 401)
         }
         return res.error("Scheduling Posts Failed", null, 500)

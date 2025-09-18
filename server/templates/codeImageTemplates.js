@@ -47,6 +47,7 @@ export const codeImageTemplate = (language = 'javascript', bgColor, codeColor, c
         margin: 0 auto;
         border-radius: 8px;
         padding: 12px;
+        max-width: 580px;
       }
       .mc-outer-div {
         display: flex;
@@ -108,9 +109,7 @@ export const codeImageTemplate = (language = 'javascript', bgColor, codeColor, c
 
           <!-- code editor -->
           <div class="no-border" style="${cardColor}">
-            <pre class="language-${language}" style="${cardColor}"><code>
-                 
-            </code></pre>
+            <pre class="language-${language}" style="${cardColor}"><code>${codeSnippet}</code></pre>
           </div>
         </div>
       </div>
@@ -129,26 +128,9 @@ export const codeImageTemplate = (language = 'javascript', bgColor, codeColor, c
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
-
-    <!-- JS-Beautify -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify-js.min.js"></script>
-
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        const codeBlock = document.querySelector("pre code");
-        const rawCode = ${JSON.stringify(codeSnippet)};
-
-        // Format using js-beautify
-        const formattedCode = js_beautify(rawCode, {
-          indent_size: 4,
-          space_in_empty_paren: true,
-        });
-
-        codeBlock.textContent = formattedCode;
-
-        // Highlight with Prism
-        Prism.highlightElement(codeBlock);
+        Prism.highlightAll();
       });
     </script>
   </body>

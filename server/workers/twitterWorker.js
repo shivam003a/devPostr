@@ -6,8 +6,10 @@ import User from '../models/user.models.js'
 import Post from '../models/post.models.js'
 import puppeteer from 'puppeteer'
 import { codeImageTemplate, explainationImageTemplate } from '../templates/codeImageTemplates.js';
-import { uploadToCloudinary } from '../lib/cloudinary.js';
 import { EUploadMimeType, TwitterApi } from 'twitter-api-v2';
+import js_beautify from 'js-beautify'
+import pkg from 'he'
+const { encode } = pkg
 
 // Puppeteer Optimization Variables
 let jobCount = 0;
@@ -59,19 +61,16 @@ const worker = new Worker('twitter_posts', async (job) => {
             throw new Error(`[Job ${job.id}] Post not found: postId=${postId}, batchId=${batchId}, userId=${userId}`);
         }
 
-        const { langauge, bgColor, codeColor, codeSnippet, correctAns, explaination, caption, hashtags } = post;
+        const { caption, hashtags } = post;
 
-        // Image Contents
-        const codeHtml = codeImageTemplate(langauge, bgColor, codeColor, codeSnippet);
         const tags = hashtags ? hashtags.split(',').map((tag) => `#${tag.trim()}`).join(" ") : ""
         const codeCaption = caption + "\n\n" + tags;
-        const explainationHtml = explainationImageTemplate(langauge, bgColor, codeColor, correctAns, explaination)
         const explainationCaption = "Here is the explaination for above code\n"
 
         // Get Images, Cloudinary Links
         const [codeData, explainationData] = await Promise.allSettled([
-            processPost(codeHtml),
-            processPost(explainationHtml)
+            processPost("code", post),
+            processPost("explaination", post)
         ])
 
         // Tweet Values
@@ -87,8 +86,6 @@ const worker = new Worker('twitter_posts', async (job) => {
                 text: codeCaption,
                 media: codeMediaId ? { media_ids: [codeMediaId] } : undefined
             })
-            post.codeUrl = codeData?.value?.cloudinaryUrl;
-            post.codePublicId = codeData?.value?.cloudinaryPublicId
             post.tweetId = codeTweet?.data?.id;
             post.status = "posted"
             await post.save();
@@ -103,8 +100,6 @@ const worker = new Worker('twitter_posts', async (job) => {
                 media: explainationMediaId ? { media_ids: [explainationMediaId] } : undefined,
                 reply: { in_reply_to_tweet_id: codeTweet?.data?.id }
             })
-            post.explainationUrl = explainationData?.value?.cloudinaryUrl;
-            post.explainationPublicId = explainationData?.value?.cloudinaryPublicId
             post.replyTweet = explainationTweet?.data?.id;
             await post.save();
         }
@@ -121,11 +116,7 @@ const worker = new Worker('twitter_posts', async (job) => {
         try { await Post.findByIdAndUpdate(postId, { status: 'failed' }, { new: true }) }
         catch (err) { throw err; }
 
-        if (e?.error && e?.errors[0].code == '89') {
-            console.error(`[Job ${job.id}] Failed: postId=${postId}, batchId=${batchId}, userId=${userId} - Error: ${e.errors[0].message}`);
-        } else {
-            console.error(`[Job ${job.id}] Failed: postId=${postId}, batchId=${batchId}, userId=${userId} - Error: ${e.message}`);
-        }
+        console.error(`[Job ${job.id}] Failed 2: postId=${postId}, batchId=${batchId}, userId=${userId} - Error: ${e.message}`);
         throw e;
     }
 
@@ -139,7 +130,7 @@ worker.on('completed', (job) => {
     console.log(`[Job ${job.id}] Completed successfully: postId=${job.data.postId}, batchId=${job.data.batchId}, userId=${job.data.userId}`)
 })
 worker.on('failed', (job, err) => {
-    console.error(`[Job ${job.id}] Failed: postId=${job.data.postId}, batchId=${job.data.batchId}, userId=${job.data.userId} - Error: ${err.message}`)
+    console.error(`[Job ${job.id}] Failed 3: postId=${job.data.postId}, batchId=${job.data.batchId}, userId=${job.data.userId} - Error: ${err}`)
 })
 worker.on('error', (err) => console.error(`Worker Error:`, err))
 
@@ -157,8 +148,28 @@ const shutdown = async () => {
 process.on("SIGINT", shutdown)
 process.on("SIGTERM", shutdown)
 
-const processPost = async (htmlTemplate) => {
+const processPost = async (type, post) => {
+    let htmlTemplate;
     let page;
+
+    if (type === "code") {
+        const formattedCode = js_beautify(post?.codeSnippet?.trim(), {
+            indent_size: 2,
+            space_in_empty_paren: true,
+            break_chained_methods: true,
+            preserve_newlines: true,
+            max_preserve_newlines: 2,
+            wrap_line_length: 80,
+        })
+        const escapedCodeSnippet = encode(formattedCode, {
+            useNamedReferences: true
+        })
+        htmlTemplate = codeImageTemplate(post?.langauge, post?.bgColor, post?.codeColor, escapedCodeSnippet);
+    }
+    else {
+        htmlTemplate = explainationImageTemplate(post?.langauge, post?.bgColor, post?.codeColor, post?.correctAns, post?.explaination)
+    }
+
     try {
         const browser = await initBrowser()
         page = await browser.newPage();
@@ -166,11 +177,8 @@ const processPost = async (htmlTemplate) => {
         await page.setContent(htmlTemplate, { waitUntil: 'networkidle0' });
         await new Promise(resolve => setTimeout(resolve, 100))
         const buffer = await page.screenshot({ type: 'png' })
-        const result = await uploadToCloudinary(buffer);
 
         return {
-            cloudinaryUrl: result?.secure_url,
-            cloudinaryPublicId: result?.public_id,
             buffer: buffer
         }
     } catch (e) {

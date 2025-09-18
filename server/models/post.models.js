@@ -38,15 +38,11 @@ const postSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Batch"
     },
-    codeUrl: String,
-    explainationUrl: String,
     scheduledAt: {
         type: Date
     },
 
     // cloudinary public ids
-    codePublicId: String,
-    explainationPublicId: String,
     bgColor: Object,
     codeColor: Object,
     jobId: String,
