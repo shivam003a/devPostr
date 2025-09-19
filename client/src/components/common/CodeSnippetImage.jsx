@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
 import { toPng } from 'html-to-image'
-import { Code, Download } from 'lucide-react'
+import { Code, Download, Loader } from 'lucide-react'
 import { SketchPicker } from 'react-color'
 import * as Popover from '@radix-ui/react-popover';
 import { js as js_beautify } from 'js-beautify';
@@ -20,13 +20,16 @@ export default function CodeSnippetImage({ post, initialCode, onChange, isDashbo
     const [selected, setSelected] = useState(Boolean((post?.status === "scheduled") || post?.status === "posted") || false)
     const [scheduledAt, setScheduledAt] = useState(post?.scheduledAt ? new Date(post?.scheduledAt) : undefined)
 
+    const [downloadLoading, setDownloadLoading] = useState(false)
+
     const downloadRef = useRef(null)
 
     const handleDownload = useCallback(() => {
+        setDownloadLoading(true)
         if (!downloadRef.current) return;
 
         toPng(downloadRef?.current, {
-            cacheBust: true,
+            cacheBust: false,
             pixelRatio: 4
         })
             .then((dataURL) => {
@@ -38,6 +41,7 @@ export default function CodeSnippetImage({ post, initialCode, onChange, isDashbo
             .catch((err) => {
                 console.error("Image export failed", err);
             });
+        setDownloadLoading(false)
     }, []);
 
     useEffect(() => {
@@ -155,14 +159,23 @@ export default function CodeSnippetImage({ post, initialCode, onChange, isDashbo
 
                     {/* export btn */}
                     <button
-                        className="w-7 h-7 flex items-center justify-center gap-2 border border-light-blue-1 p-1 cursor-pointer"
+                        className="w-7 h-7 flex items-center justify-center gap-2 border border-light-blue-1 p-1 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                         onClick={handleDownload}
+                        disabled={downloadLoading}
                     >
-                        <Download
-                            color="#3c83f6"
-                            size={15}
-                            strokeWidth={1}
-                        />
+                        {downloadLoading ?
+                            <Loader
+                                color="#3c83f6"
+                                size={15}
+                                strokeWidth={1}
+                                className="animate-spin"
+                            /> :
+                            <Download
+                                color="#3c83f6"
+                                size={15}
+                                strokeWidth={1}
+                            />}
+
                     </button>
                 </div>
             </div>
