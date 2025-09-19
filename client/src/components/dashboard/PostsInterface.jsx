@@ -75,7 +75,7 @@ function PostsInterface() {
                 {loading ? (
                     <Loader size={22} strokeWidth={1} color="#fff" className="animate-spin" />
                 ) : (
-                    <div className="w-full h-full max-w-[996px] grid grid-cols-1 lg:grid-cols-2 p-2 items-stretch gap-4 relative mb-4">
+                    <div className="w-full h-full max-w-[996px] grid grid-cols-1 lg:grid-cols-2 p-2 items-stretch gap-4 relative">
                         {
                             batchesPosts && batchesPosts?.length > 0 ? (
                                 batchesPosts.map((post, index) => {

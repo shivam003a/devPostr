@@ -17,7 +17,7 @@ export default function CodeSnippetImage({ post, initialCode, onChange, isDashbo
     const [language, setLanguage] = useState(post?.langauge || "javascript");
     const [color, setColor] = useState(post?.bgColor || { r: '168', g: '181', b: '192', a: '1' })
     const [codeColor, setCodeColor] = useState(post?.codeColor || { r: '39', g: '40', b: '34', a: '1' })
-    const [selected, setSelected] = useState(Boolean((post?.status !== "not_scheduled")) || false)
+    const [selected, setSelected] = useState(Boolean((post?.status === "scheduled") || post?.status === "posted") || false)
     const [scheduledAt, setScheduledAt] = useState(post?.scheduledAt ? new Date(post?.scheduledAt) : undefined)
 
     const downloadRef = useRef(null)

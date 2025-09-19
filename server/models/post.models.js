@@ -46,7 +46,9 @@ const postSchema = new mongoose.Schema({
     bgColor: Object,
     codeColor: Object,
     jobId: String,
+    tweetMediaId: String,
     tweetId: String,
+    replyMediaId: String,
     replyTweet: String
 }, { timestamps: true })
 

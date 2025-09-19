@@ -29,11 +29,22 @@ export const schedulePosts = async (req, res) => {
             accessToken: user?.twitterAccessToken,
             accessSecret: user?.twitterAccessSecret
         })
-        await tempClient.v1.verifyCredentials();
+        try {
+            await tempClient.v1.verifyCredentials();
+        } catch (error) {
+            await User.findByIdAndUpdate(userId, {
+                $set: {
+                    twitterAccessSecret: null,
+                    twitterAccessToken: null,
+                    isTwitterConnected: false
+                }
+            })
+            return res.error("Invalid Twitter credentials", null, 401)
+        }
 
         // Get Valid posts
         const validPosts = postToSchedule?.filter(post => (
-            post?.scheduledAt && (post?.status === 'not_scheduled' || post?.status === 'failed')
+            post?.selected && post?.scheduledAt && (post?.status === 'not_scheduled' || post?.status === 'failed')
         ))
 
         if (validPosts?.length === 0) {
@@ -66,7 +77,7 @@ export const schedulePosts = async (req, res) => {
                 removeOnComplete: { age: 3600, count: 100 },
                 removeOnFail: { age: 7 * 24 * 3600, count: 50 },
                 attempts: 3,
-                backoff: { type: 'exponential', delay: 2000 }
+                backoff: { type: 'exponential', delay: 5000 }
             })
 
             // update mongodb post, update bgColor, codeColor, status to "scheduled", also store job id to deletelater frombullmq
