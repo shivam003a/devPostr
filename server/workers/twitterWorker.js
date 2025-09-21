@@ -29,79 +29,78 @@ let browserClosed = true;
 const worker = new Worker('twitter_posts', async (job) => {
 
     const { postId, batchId, userId } = job?.data;
+    let post = null;
     console.log(`[Job ${job.id}] Processing: postId=${postId}, batchId=${batchId}, userId=${userId}`);
 
     try {
-        // Check for User
-        const user = await User.findById(userId)
-        if (!user) {
-            console.error("User Not Found for job:", job?.id)
-            throw new Error(`[Job ${job.id}] User not found: postId=${postId}, batchId=${batchId}, userId=${userId}`);
-        }
-        if (!user?.twitterAccessSecret || !user?.twitterAccessToken || !user?.isTwitterConnected) {
-            console.error("Twitter not connected for job:", job?.id)
-            throw new Error(`[Job ${job.id}] Twitter not connected: postId=${postId}, batchId=${batchId}, userId=${userId}`);
-        }
-        const userClient = new TwitterApi({
-            appKey: process?.env?.X_API_KEY,
-            appSecret: process?.env?.X_API_KEY_SECRET,
-            accessToken: user?.twitterAccessToken,
-            accessSecret: user?.twitterAccessSecret,
-        });
-        await userClient.v1.verifyCredentials();
+        const twitterClient = await validateUser(userId, postId, batchId, job);
+        post = await validatePost(userId, postId, batchId, job);
 
-        // Check for Post
-        const post = await Post.findOne({
-            _id: postId,
-            batch: batchId,
-            createdBy: userId
-        })
-        if (!post) {
-            console.error("Post Not Found for job:", job?.id)
-            throw new Error(`[Job ${job.id}] Post not found: postId=${postId}, batchId=${batchId}, userId=${userId}`);
-        }
-
+        // Process Captions
         const { caption, hashtags } = post;
+        const { codeCaption, explainationCaption } = processCaptions(hashtags, caption);
 
-        const tags = hashtags ? hashtags.split(',').map((tag) => `#${tag.trim()}`).join(" ") : ""
-        const codeCaption = caption + "\n\n" + tags;
-        const explainationCaption = "Here is the explaination for above code\n"
-
-        // Get Images, Cloudinary Links
+        // Generate Image
         const [codeData, explainationData] = await Promise.allSettled([
             processPost("code", post),
             processPost("explaination", post)
         ])
 
-        // Tweet Values
-        let codeMediaId = null;
-        let codeTweet = null;
-        let explainationMediaId = null;
-        let explainationTweet = null;
-
-        // Initiate Tweets
+        // Make Code Tweet
         if (codeData?.status === 'fulfilled') {
-            codeMediaId = await userClient.v1.uploadMedia(codeData?.value?.buffer, { mimeType: EUploadMimeType.Png })
-            codeTweet = await userClient?.v2.tweet({
-                text: codeCaption,
-                media: codeMediaId ? { media_ids: [codeMediaId] } : undefined
-            })
-            post.tweetId = codeTweet?.data?.id;
-            post.status = "posted"
-            await post.save();
+            if (!post?.tweetMediaId) {
+                const mediaId = await twitterClient.v1.uploadMedia(codeData?.value?.buffer, {
+                    mimeType: EUploadMimeType.Png
+                })
+                post.tweetMediaId = mediaId;
+                await post.save();
+            }
+
+            const codeMediaId = post?.tweetMediaId;
+
+            if (!post?.tweetId) {
+                if (!codeMediaId) {
+                    throw new Error("Cannot post code tweet: missing code media ID");
+                }
+                const codeTweet = await twitterClient?.v2.tweet({
+                    text: codeCaption,
+                    media: codeMediaId ? { media_ids: [codeMediaId] } : undefined
+                })
+                post.tweetId = codeTweet?.data?.id;
+                post.status = "posted"
+                await post.save();
+            }
         }
 
         // make a thread
         if (explainationData?.status === 'fulfilled') {
-            explainationMediaId = await userClient.v1.uploadMedia(explainationData?.value?.buffer, { mimeType: EUploadMimeType.Png })
+            if (!post?.replyMediaId) {
+                const mediaId = await twitterClient.v1.uploadMedia(explainationData?.value?.buffer, { mimeType: EUploadMimeType.Png })
+                post.replyMediaId = mediaId;
+                await post.save();
+            }
 
-            explainationTweet = await userClient?.v2.tweet({
-                text: explainationCaption,
-                media: explainationMediaId ? { media_ids: [explainationMediaId] } : undefined,
-                reply: { in_reply_to_tweet_id: codeTweet?.data?.id }
-            })
-            post.replyTweet = explainationTweet?.data?.id;
-            await post.save();
+            const explainationMediaId = post.replyMediaId;
+            const codeTweet = post?.tweetId;
+
+            if (!post?.replyTweet) {
+                // Ensure we have the tweet to reply to
+                if (!codeTweet) {
+                    throw new Error("Cannot post explanation reply: missing codeTweet ID");
+                }
+
+                // Ensure we have media (if your design requires it)
+                if (!explainationMediaId) {
+                    throw new Error("Cannot post explanation reply: missing explanation media ID");
+                }
+                const explainationTweet = await twitterClient?.v2.tweet({
+                    text: explainationCaption,
+                    media: explainationMediaId ? { media_ids: [explainationMediaId] } : undefined,
+                    reply: { in_reply_to_tweet_id: codeTweet }
+                })
+                post.replyTweet = explainationTweet?.data?.id;
+                await post.save();
+            }
         }
 
         if (codeData.status === 'rejected' && explainationData.status === 'rejected') {
@@ -110,14 +109,20 @@ const worker = new Worker('twitter_posts', async (job) => {
 
         jobCount++;
         await restartBrowser();
-        return `Tweeted Sucessfully with tweetId: ${codeTweet?.data?.id}, postId: ${postId}`
+        return `Tweeted Sucessfully:, postId: ${postId}`
 
     } catch (e) {
-        try { await Post.findByIdAndUpdate(postId, { status: 'failed' }, { new: true }) }
-        catch (err) { throw err; }
+        if (!post?.tweetId) {
+            try {
+                await Post.findByIdAndUpdate(postId, { status: 'failed' }, { new: true })
+            } catch (error) {
+                throw e;
+            }
+            throw e;
+        }
 
-        console.error(`[Job ${job.id}] Failed 2: postId=${postId}, batchId=${batchId}, userId=${userId} - Error: ${e.message}`);
-        throw e;
+        console.warn(`Code tweeted successfully, explanation failed: ${e.message}`);
+        return `Code tweet posted successfully`;
     }
 
 }, { connection, concurrency: 1, lockDuration: 5 * 60 * 1000 })
@@ -147,6 +152,104 @@ const shutdown = async () => {
 }
 process.on("SIGINT", shutdown)
 process.on("SIGTERM", shutdown)
+
+const initBrowser = async () => {
+    if (!browser || browserClosed) {
+        browser = await puppeteer.launch({
+            headless: true,
+            executablePath: puppeteer.executablePath(),
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-gpu',
+            ]
+        })
+        browserClosed = false;
+        browser.on('disconnected', () => { browserClosed = true })
+        console.log("Puppeteer Browser Launched")
+    }
+    return browser;
+}
+
+const restartBrowser = async () => {
+    const age = Date.now() - browserStartTime;
+    if (jobCount >= MAX_JOBS || age >= MAX_AGE_MS) {
+        console.log("Restarting Puppeteer Browser...")
+        try {
+            if (browser && !browserClosed) await browser.close();
+        } catch (e) {
+            console.error("Error closing browser:", e);
+        }
+        browser = null;
+        jobCount = 0;
+        browserStartTime = Date.now();
+    }
+}
+
+const validateUser = async (userId, postId, batchId, job) => {
+    try {
+        const user = await User.findById(userId)
+        if (!user) {
+            console.error("User not found for jobId:", job?.id)
+            throw new Error(`[Job ${job.id}] User not found: postId=${postId}, batchId=${batchId}, userId=${userId}`);
+        }
+        if (!user?.twitterAccessSecret || !user?.twitterAccessToken || !user?.isTwitterConnected) {
+            console.error("Twitter not connected for userId:", userId)
+            throw new Error(`[Job ${job.id}] Twitter not connected: postId=${postId}, batchId=${batchId}, userId=${userId}`);
+        }
+
+        const twitterClient = new TwitterApi({
+            appKey: process?.env?.X_API_KEY,
+            appSecret: process?.env?.X_API_KEY_SECRET,
+            accessToken: user?.twitterAccessToken,
+            accessSecret: user?.twitterAccessSecret,
+        });
+        try {
+            await twitterClient.v1.verifyCredentials();
+        } catch (error) {
+            await User.findByIdAndUpdate(userId, {
+                $set: {
+                    twitterAccessSecret: null,
+                    twitterAccessToken: null,
+                    isTwitterConnected: false
+                }
+            })
+            throw new Error("Invalid Twitter credentials for userId:", userId)
+        }
+
+        return twitterClient;
+
+    } catch (err) {
+        throw err;
+    }
+}
+
+const validatePost = async (userId, postId, batchId, job) => {
+    try {
+        const post = await Post.findOne({
+            _id: postId,
+            batch: batchId,
+            createdBy: userId
+        })
+        if (!post) {
+            console.error("Post Not Found for job:", job?.id)
+            throw new Error(`[Job ${job.id}] Post not found: postId=${postId}, batchId=${batchId}, userId=${userId}`);
+        }
+        return post;
+
+    } catch (err) {
+        throw err;
+    }
+}
+
+const processCaptions = (hashtags, caption) => {
+    const tags = hashtags ? hashtags.split(',').map((tag) => `#${tag.trim()}`).join(" ") : ""
+    const codeCaption = caption + "\n\n" + tags;
+    const explainationCaption = "Here is the explaination for above code\n"
+
+    return { codeCaption, explainationCaption };
+}
 
 const processPost = async (type, post) => {
     let htmlTemplate;
@@ -185,42 +288,7 @@ const processPost = async (type, post) => {
         console.error("Something Went Wrong:", e)
         throw e;
     } finally {
-        try {
-            if (page) await page.close()
-        } catch (err) { console.error("Error closing browser:", err) }
-    }
-}
-
-const initBrowser = async () => {
-    if (!browser || browserClosed) {
-        browser = await puppeteer.launch({
-            headless: true,
-            executablePath: puppeteer.executablePath(),
-            args: [
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-gpu',
-            ]
-        })
-        browserClosed = false;
-        browser.on('disconnected', () => { browserClosed = true })
-        console.log("Puppeteer Browser Launched")
-    }
-    return browser;
-}
-
-const restartBrowser = async () => {
-    const age = Date.now() - browserStartTime;
-    if (jobCount >= MAX_JOBS || age >= MAX_AGE_MS) {
-        console.log("Restarting Puppeteer Browser...")
-        try {
-            if (browser && !browserClosed) await browser.close();
-        } catch (e) {
-            console.error("Error closing browser:", e);
-        }
-        browser = null;
-        jobCount = 0;
-        browserStartTime = Date.now();
+        try { if (page) await page.close() }
+        catch (err) { console.error("Error closing browser:", err) }
     }
 }
