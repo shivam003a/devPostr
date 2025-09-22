@@ -33,6 +33,7 @@ export const register = async (req, res) => {
                 existingUser.otpCode = otpCode;
                 existingUser.otpCodeExpiresIn = otpCodeExpiresIn;
                 existingUser.password = hashedPassword;
+                existingUser.name = name;
 
                 await existingUser.save();
                 sendOtpEmail(email, otpCode);
@@ -65,6 +66,7 @@ export const register = async (req, res) => {
             otpCode,
             otpCodeExpiresIn,
             isVerified: false,
+            role: 'user'
         });
 
         // response
@@ -126,6 +128,7 @@ export const login = async (req, res) => {
             _id: existingUser?._id,
             email: existingUser?.email,
             isVerified: existingUser?.isVerified,
+            role: existingUser?.role
         };
         const token = await generateToken(payload);
 
@@ -201,6 +204,7 @@ export const verifyOtp = async (req, res) => {
             _id: updatedUser?._id,
             email: updatedUser?.email,
             isVerified: updatedUser?.isVerified,
+            role: updatedUser?.role
         };
         const token = await generateToken(payload);
 

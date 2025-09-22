@@ -1,3 +1,4 @@
+import { decryptData } from "../lib/crypto.js";
 import twitterQueue from "../lib/queue.js";
 import Post from "../models/post.models.js";
 import User from '../models/user.models.js'
@@ -26,8 +27,8 @@ export const schedulePosts = async (req, res) => {
         const tempClient = new TwitterApi({
             appKey: process?.env?.X_API_KEY,
             appSecret: process?.env?.X_API_KEY_SECRET,
-            accessToken: user?.twitterAccessToken,
-            accessSecret: user?.twitterAccessSecret
+            accessToken: decryptData(user?.twitterAccessToken),
+            accessSecret: decryptData(user?.twitterAccessSecret)
         })
         try {
             await tempClient.v1.verifyCredentials();

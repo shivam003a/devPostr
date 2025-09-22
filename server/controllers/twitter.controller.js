@@ -2,6 +2,7 @@ import { TwitterApi } from 'twitter-api-v2';
 import client from '../lib/twitter.js'
 import dotenv from 'dotenv'
 import User from '../models/user.models.js';
+import { encryptData } from '../lib/crypto.js'
 
 dotenv.config();
 
@@ -42,9 +43,12 @@ export const twitterCallabck = async (req, res) => {
         const { client: loggedClient, accessToken, accessSecret } =
             await tempClient.login(oauth_verifier)
 
+        // Encypt accessSecret/accessToken
+        const encryptedAccessToken = encryptData(accessToken)
+        const encryptedAccessSecret = encryptData(accessSecret)
         const user = await User.findOneAndUpdate(
             { email, _id },
-            { twitterAccessSecret: accessSecret, twitterAccessToken: accessToken, isTwitterConnected: true },
+            { twitterAccessSecret: encryptedAccessSecret, twitterAccessToken: encryptedAccessToken, isTwitterConnected: true },
             { new: true }
         )
 

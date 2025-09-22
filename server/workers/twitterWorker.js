@@ -9,6 +9,7 @@ import { codeImageTemplate, explainationImageTemplate } from '../templates/codeI
 import { EUploadMimeType, TwitterApi } from 'twitter-api-v2';
 import js_beautify from 'js-beautify'
 import pkg from 'he'
+import { decryptData } from '../lib/crypto.js';
 const { encode } = pkg
 
 // Puppeteer Optimization Variables
@@ -202,8 +203,8 @@ const validateUser = async (userId, postId, batchId, job) => {
         const twitterClient = new TwitterApi({
             appKey: process?.env?.X_API_KEY,
             appSecret: process?.env?.X_API_KEY_SECRET,
-            accessToken: user?.twitterAccessToken,
-            accessSecret: user?.twitterAccessSecret,
+            accessToken: decryptData(user?.twitterAccessToken),
+            accessSecret: decryptData(user?.twitterAccessSecret),
         });
         try {
             await twitterClient.v1.verifyCredentials();
