@@ -15,7 +15,6 @@
     "author": "Shivam Singh",
     "license": "ISC",
     "dependencies": {
-        "@bull-board/express": "^6.12.7",
         "@exortek/express-mongo-sanitize": "^1.1.0",
         "@sparticuz/chromium": "^138.0.2",
         "axios": "^1.11.0",
