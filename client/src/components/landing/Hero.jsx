@@ -8,6 +8,21 @@ function Hero() {
     const [pos, setPos] = useState({ x: 0, y: 0 })
     const { isAuthenticated } = useSelector((state) => state.auth)
 
+    const container = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.2
+            }
+        }
+    }
+
+    const item = {
+        hidden: { opacity: 0, y: 20 },
+        show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+    };
+
     useEffect(() => {
         const handleMouseMove = (e) => {
             setPos({ x: e?.clientX, y: e?.clientY })
@@ -30,7 +45,7 @@ function Hero() {
                         className="text-gray flex gap-2 items-center py-2 px-4 rounded-full bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)] mb-4"
                         initial={{ y: -100, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.3 }}
+                        transition={{ duration: 0.3, delay: 0.2 }}
                     >
                         <Sparkles color="#3c83f6" size={18} />
                         <span className="text-xs text-white font-semibold font-poppins"> AI-Powered Code Generation </span>
@@ -39,24 +54,36 @@ function Hero() {
                     {/* heading */}
                     <motion.div
                         className="text-white text-[64px] font-poppins font-bold leading-16 sm:leading-10 text-center"
-                        initial={{ opacity: 0, scale: 0.5 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.7 }}
+                        initial={{ y: -100, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.3 }}
                     >
                         Create <span className="text-light-blue-1">Beautiful</span>
                     </motion.div>
                     <motion.h1
                         className="text-white text-[64px] font-poppins font-bold leading-16 sm:leading-10 text-center"
-                        initial={{ opacity: 0, scale: 0.5 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.7 }}
+                        initial={{ y: -100, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.3 }}
                     >
                         Code Snippets
                     </motion.h1>
-                    <p className="font-poppins text-lg text-gray text-center max-w-[90%] sm:max-w-[65%]">Transform your code into stunning visual content for Twitter with AI-powered generation and premium design templates</p>
+                    <motion.p
+                        className="font-poppins text-lg text-gray text-center max-w-[90%] sm:max-w-[65%]"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 1.5, delay: 0.4 }}
+                    >
+                        Transform your code into stunning visual content for Twitter with AI-powered generation and premium design templates
+                    </motion.p>
 
                     {/* cta */}
-                    <div className="flex gap-4 items-center justify-center flex-wrap">
+                    <motion.div
+                        className="flex gap-4 items-center justify-center flex-wrap"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.4, delay: 0.5 }}
+                    >
                         <NavLink
                             to={isAuthenticated ? "/dashboard" : "/register"}
                             className="py-3 px-8 bg-gradient-to-tr from-light-blue-1 to-light-blue-2 text-black text-lg rounded-lg flex items-center gap-4 cursor-pointer shadow-[0px_0px_30px_5px_rgba(59,130,246,0.5)] hover:shadow-[0px_0px_34px_8px_rgba(59,130,246,0.5)]"
@@ -72,29 +99,34 @@ function Hero() {
                             <Code color="#ffffff" size={18} />
                             <span className="text-sm font-poppins font-semibold text-white">View Examples</span>
                         </NavLink>
-                    </div>
+                    </motion.div>
 
                     {/* feature */}
-                    <div className="flex items-center justify-center gap-8 mt-12 flex-wrap">
-                        <div className="flex gap-2 items-center justify-center">
+                    <motion.div
+                        className="flex items-center justify-center gap-8 mt-12 flex-wrap"
+                        variants={container}
+                        initial="hidden"
+                        animate="show"
+                    >
+                        <motion.div className="flex gap-2 items-center justify-center" variants={item}>
                             <div className="p-2 rounded-xl bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)]">
                                 <Code color="#3c83f6" size={18} />
                             </div>
                             <span className="font-poppins text-gray text-sm">AI Generation</span>
-                        </div>
-                        <div className="flex gap-2 items-center justify-center">
+                        </motion.div>
+                        <motion.div className="flex gap-2 items-center justify-center" variants={item}>
                             <div className="p-2 rounded-xl bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)]">
                                 <Twitter color="#3c83f6" size={18} />
                             </div>
                             <span className="font-poppins text-gray text-sm">Twitter Ready</span>
-                        </div>
-                        <div className="flex gap-2 items-center justify-center">
+                        </motion.div>
+                        <motion.div className="flex gap-2 items-center justify-center" variants={item}>
                             <div className="p-2 rounded-xl bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)]">
                                 <Sparkles color="#3c83f6" size={18} />
                             </div>
                             <span className="font-poppins text-gray text-sm">Premium Design</span>
-                        </div>
-                    </div>
+                        </motion.div>
+                    </motion.div>
 
                     {/* bg dots */}
                     <div className="bg-light-blue-1 w-1 h-1 opacity-55 rounded-full absolute animate-cs-bounce top-[10%] right-[10%]"></div>
@@ -109,7 +141,7 @@ function Hero() {
                         style={{ left: pos.x, top: pos.y, transform: "translate(-50%,-50%)", }} >
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     )
 }
