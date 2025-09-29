@@ -58,7 +58,7 @@ function Hero() {
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ duration: 0.3 }}
                     >
-                        Create & Schedule Beautiful Code Snippets
+                        Create & <span className="text-light-blue-1">Schedule</span> Beautiful Code Snippets
                     </motion.div>
                     <motion.p
                         className="font-poppins text-lg text-gray text-center max-w-[90%] sm:max-w-[65%]"
@@ -66,7 +66,7 @@ function Hero() {
                         animate={{ opacity: 1 }}
                         transition={{ duration: 1.5, delay: 0.4 }}
                     >
-                        Transform your code into stunning visual content for Twitter with AI-powered generation and premium design templates
+                        Turn your code into stunning visuals with AI-powered templates — and schedule posts to share automatically on Twitter
                     </motion.p>
 
                     {/* cta */}
