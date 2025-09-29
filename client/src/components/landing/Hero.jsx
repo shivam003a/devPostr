@@ -52,24 +52,14 @@ function Hero() {
                     </motion.span>
 
                     {/* heading */}
-                    <div className="flex flex-col gap-2 sm:gap-8">
-                        <motion.div
-                            className="text-white text-[64px] font-poppins font-bold leading-16 sm:leading-10 text-center"
-                            initial={{ y: -100, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            Create <span className="text-light-blue-1">Beautiful</span>
-                        </motion.div>
-                        <motion.h1
-                            className="text-white text-[64px] font-poppins font-bold leading-16 sm:leading-10 text-center"
-                            initial={{ y: -100, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            Code Snippets
-                        </motion.h1>
-                    </div>
+                    <motion.div
+                        className="text-white text-[46px] sm:text-[64px] font-poppins font-bold leading-16 sm:leading-20 text-center max-w-[90%] sm:max-w-[70%]"
+                        initial={{ y: -100, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        Create & Schedule Beautiful Code Snippets
+                    </motion.div>
                     <motion.p
                         className="font-poppins text-lg text-gray text-center max-w-[90%] sm:max-w-[65%]"
                         initial={{ opacity: 0 }}
