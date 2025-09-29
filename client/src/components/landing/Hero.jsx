@@ -53,7 +53,7 @@ function Hero() {
 
                     {/* heading */}
                     <motion.div
-                        className="text-white text-[46px] sm:text-[64px] font-poppins font-bold leading-16 sm:leading-20 text-center max-w-[90%] sm:max-w-[70%]"
+                        className="text-white text-[46px] sm:text-[64px] font-poppins font-bold leading-14 sm:leading-20 text-center max-w-[100%] sm:max-w-[70%]"
                         initial={{ y: -100, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ duration: 0.3 }}
