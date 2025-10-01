@@ -25,7 +25,11 @@ export const requestToken = async (req, res) => {
 export const twitterCallabck = async (req, res) => {
     try {
         const { _id, email } = req.user
-        const { oauth_token, oauth_verifier } = req.query;
+        const { oauth_token, oauth_verifier, denied } = req.query;
+
+        if (denied) {
+            return res.redirect(`${process.env.FE_URL}/dashboard?twitterConnected=false`)
+        }
         const oauth_token_secret = tempTokens[oauth_token];
 
         if (!oauth_token_secret) {
@@ -52,7 +56,7 @@ export const twitterCallabck = async (req, res) => {
             { new: true }
         )
 
-        return res.redirect(`${process.env.FE_URL}/dashboard?twitter=connected`);
+        return res.redirect(`${process.env.FE_URL}/dashboard?twitterConnected=true`);
 
     } catch (e) {
         console.error("Callback error:", e);
