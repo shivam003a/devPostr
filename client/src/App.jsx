@@ -13,6 +13,7 @@ import PrivateRoute from './components/common/PrivateRoute.jsx'
 import OtpRoute from './components/common/OtpRoute.jsx'
 import GeneratePost from './components/dashboard/GeneratePost.jsx'
 import PostsInterface from './components/dashboard/PostsInterface.jsx'
+import LostPage from './components/common/LostPage.jsx'
 
 function App() {
   const dispatch = useDispatch()
@@ -32,6 +33,7 @@ function App() {
           <Route index element={<GeneratePost />} />
           <Route path=':batchId' element={<PostsInterface />} />
         </Route>
+        <Route path='*' element={<LostPage />} />
       </Routes>
     </>
   )
