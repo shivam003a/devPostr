@@ -35,7 +35,7 @@
         "morgan": "^1.10.1",
         "nodemailer": "^7.0.5",
         "openai": "^5.20.3",
-        "puppeteer": "^24.19.0",
+        "puppeteer": "^24.23.0",
         "rate-limiter-flexible": "^7.3.1",
         "twitter-api-v2": "^1.27.0",
         "zod": "^3.25.76"

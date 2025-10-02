@@ -11,6 +11,7 @@ import js_beautify from 'js-beautify'
 import pkg from 'he'
 import { decryptData } from '../lib/crypto.js';
 const { encode } = pkg
+import chromium from '@sparticuz/chromium'
 
 // Puppeteer Optimization Variables
 let jobCount = 0;
@@ -156,10 +157,14 @@ process.on("SIGTERM", shutdown)
 
 const initBrowser = async () => {
     if (!browser || browserClosed) {
+        const isWindows = process.platform === "win32";
+        const isMac = process.platform === "darwin";
+
         browser = await puppeteer.launch({
             headless: true,
-            executablePath: puppeteer.executablePath(),
+            executablePath: isWindows || isMac ? puppeteer.executablePath() : await chromium.executablePath(),
             args: [
+                ...(isWindows || isMac ? [] : chromium.args),
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
                 '--disable-dev-shm-usage',
