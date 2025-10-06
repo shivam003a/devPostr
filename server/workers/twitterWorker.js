@@ -43,6 +43,9 @@ const worker = new Worker('twitter_posts', async (job) => {
         const { codeCaption, explainationCaption } = processCaptions(hashtags, caption);
 
         // Generate Image
+        if (!browser) {
+            browser = await initBrowser();
+        }
         const [codeData, explainationData] = await Promise.allSettled([
             processPost("code", post),
             processPost("explaination", post)
@@ -280,7 +283,7 @@ const processPost = async (type, post) => {
     }
 
     try {
-        const browser = await initBrowser()
+        browser = await initBrowser()
         page = await browser.newPage();
         await page.setViewport({ width: 600, height: 600, deviceScaleFactor: 2 });
         await page.setContent(htmlTemplate, { waitUntil: 'networkidle0' });
