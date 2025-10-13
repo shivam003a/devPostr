@@ -41,7 +41,7 @@ function Dashboard() {
                 <div className="overflow-hidden bg-light-blue/95 w-full h-full relative">
                     {
                         isMobile &&
-                        <div className="bg-dark-blue h-12 p-2 flex justify-start items-center gap-2">
+                        <div className="bg-dark-blue h-11 p-2 flex justify-start items-center gap-2">
                             <div
                                 onClick={() => setShowSidebar((prev) => !prev)}
                             >
