@@ -2,11 +2,9 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Pencil, Trash, CheckCheck, X, Loader } from 'lucide-react'
-import api from '../../lib/axiosInstance';
-import { changePasswordSchema, deleteAccountSchema } from '../../utils/zodSchema';
+import { changePasswordSchema, deleteAccountSchema, changeProfileSchema } from '../../utils/zodSchema';
 import toast from 'react-hot-toast'
 import { changePassword, changeProfile, deleteAccount } from '../../redux/slices/auth.slice';
-import { changeNameSchema } from '../../../../server/utils/zod.utils';
 import Modal from '../common/Modal';
 
 function Setting() {
@@ -29,7 +27,7 @@ function Setting() {
     const dispatch = useDispatch()
 
     const handleProfileChange = async () => {
-        const parsed = changeNameSchema.safeParse({ name })
+        const parsed = changeProfileSchema.safeParse({ name })
         if (!parsed.success) {
             const fieldErrors = {}
             parsed.error.issues?.map((err) => {
