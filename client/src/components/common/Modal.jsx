@@ -27,7 +27,7 @@ export default function Modal({ children, open, setOpen, headerTitle, subHeaderT
             <div className={`max-w-[900px] w-full max-h-[450px] ${heightFit ? "" : "h-full"} sm:w-[700px] bg-dark-blue/90 p-4 rounded-lg overflow-hidden m-2`}
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className='flex items-center justify-between pb-4'>
+                <div className='flex items-start justify-between pb-4'>
                     <div className='flex flex-col gap-1'>
                         <span className='text-white text-lg font-semibold font-poppins'>{headerTitle}</span>
                         <span className='text-gray text-xs font-poppins'>{subHeaderTitle}</span>
