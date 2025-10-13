@@ -45,3 +45,28 @@ export const generatePostsSchema = z.object({
         .min(1, { messege: "noOfPosts must be at least 1" })
         .max(10, { message: "noOfPosts cannot exceed 10" }),
 })
+
+export const changePasswordSchema = z.object({
+    oldPassword: z
+        .string()
+        .min(6, { message: "Old Password must be at least 6 characters long" })
+        .max(100, { message: "Old Password must be less than 100 characters" }),
+    newPassword: z
+        .string()
+        .min(6, { message: "New Password must be at least 6 characters long" })
+        .max(100, { message: "New Password must be less than 100 characters" }),
+})
+
+export const changeProfileSchema = z.object({
+    name: z
+        .string()
+        .min(3, { message: "Name must be at least 3 characters long" })
+        .max(40, { message: "Name must be less than 40 characters" }),
+})
+
+export const deleteAccountSchema = z.object({
+    password: z
+        .string()
+        .min(6, { message: "Password must be at least 6 characters long" })
+        .max(100, { message: "Password must be less than 100 characters" }),
+})

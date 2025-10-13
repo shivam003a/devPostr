@@ -1,7 +1,7 @@
 import { X } from 'lucide-react'
 import { useEffect } from 'react';
 
-export default function Modal({ children, open, setOpen, headerTitle, subHeaderTitle, verticalAlign = "items-center" }) {
+export default function Modal({ children, open, setOpen, headerTitle, subHeaderTitle, heightFit = false, verticalAlign = "items-center", }) {
 
     useEffect(() => {
         const handleEsc = (e) => {
@@ -24,7 +24,7 @@ export default function Modal({ children, open, setOpen, headerTitle, subHeaderT
             className={`w-screen h-dvh fixed top-0 bottom-0 left-0 right-0 overflow-hidden z-100 flex ${verticalAlign} justify-center backdrop-blur-sm bg-white/5`}
             onClick={() => setOpen(false)}
         >
-            <div className="max-w-[900px] w-full max-h-[450px] h-full sm:w-[700px] bg-dark-blue/90 p-4 rounded-lg overflow-hidden m-2"
+            <div className={`max-w-[900px] w-full max-h-[450px] ${heightFit ? "" : "h-full"} sm:w-[700px] bg-dark-blue/90 p-4 rounded-lg overflow-hidden m-2`}
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className='flex items-center justify-between pb-4'>

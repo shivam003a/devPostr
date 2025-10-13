@@ -10,6 +10,7 @@ import authRoutes from './routes/auth.route.js';
 import contentRoute from './routes/content.route.js';
 import batchRoute from './routes/batch.route.js'
 import postRoute from './routes/post.route.js'
+import settingRoute from './routes/settings.route.js'
 import schedulePostsRoute from './routes/schedulePosts.route.js'
 import twitterRoutes from './routes/twitter.route.js'
 import expressMongoSanitize from '@exortek/express-mongo-sanitize'
@@ -54,6 +55,7 @@ app.use('/api/batch', batchRoute);
 app.use('/api/posts', postRoute);
 app.use('/api/schedule', schedulePostsRoute)
 app.use('/api/twitter', twitterRoutes)
+app.use('/api/settings', settingRoute)
 
 // listen
 app.listen(PORT, async function () {

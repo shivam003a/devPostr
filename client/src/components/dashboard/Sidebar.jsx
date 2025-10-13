@@ -1,4 +1,4 @@
-import { Code, Loader, LogOut, PanelRight, Search, SquarePlus, Trash, EllipsisVertical, Link, Unlink } from "lucide-react";
+import { Code, Loader, LogOut, PanelRight, Search, SquarePlus, Trash, Link, Unlink, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
@@ -235,7 +235,7 @@ function Sidebar() {
                                     </button>
                                     {user?.isTwitterConnected &&
                                         <button
-                                            className="w-full text-white text-sm hover:bg-dark-blue p-2 rounded-md cursor-pointer  flex items-center gap-2"
+                                            className="w-full text-red-500 text-sm hover:bg-dark-blue p-2 rounded-md cursor-pointer  flex items-center gap-2"
                                             onClick={handleTwiiterAuthDisconnect}
                                         >
                                             <Unlink size={16} />
@@ -243,7 +243,15 @@ function Sidebar() {
                                         </button>
                                     }
                                     <div className="w-full border-b-1 border-[rgba(255,255,255,0.2)]"></div>
-                                    <div className="w-full text-white text-sm p-2 rounded-md cursor-pointer hover:bg-dark-blue flex items-center gap-2" onClick={hnadleLogout}>
+                                    <NavLink
+                                        className="w-full text-white text-sm p-2 rounded-md cursor-pointer hover:bg-dark-blue flex items-center gap-2"
+                                        to={'/dashboard/settings'}
+                                    >
+                                        <Settings size={16} />
+                                        Settings
+                                    </NavLink>
+                                    <div className="w-full border-b-1 border-[rgba(255,255,255,0.2)]"></div>
+                                    <div className="w-full text-red-500 text-sm p-2 rounded-md cursor-pointer hover:bg-dark-blue flex items-center gap-2" onClick={hnadleLogout}>
                                         <LogOut size={16} />
                                         Logout
                                     </div>

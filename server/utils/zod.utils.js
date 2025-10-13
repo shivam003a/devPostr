@@ -66,3 +66,31 @@ export const schedulePostSchema = z.object({
             message: "scheduledAt must be a valid date",
         }),
 });
+
+export const changeNameSchema = z.object({
+    name: z
+        .string({
+            required_error: "name field is required",
+            invalid_type_error: "Not a string"
+        })
+        .min(2, { message: "Name must be at least 2 characters long" })
+        .max(100, { message: "Name must not exceed 50 characters" }),
+})
+
+export const changePasswordSchema = z.object({
+    newPassword: z
+        .string()
+        .min(6, { message: "newPassword must be at least 6 characters long" })
+        .max(100, { message: "newPassword must not exceed 100 characters" }),
+    oldPassword: z
+        .string()
+        .min(6, { message: "oldPassword must be at least 6 characters long" })
+        .max(100, { message: "oldPassword must not exceed 100 characters" })
+})
+
+export const deleteAccountSchema = z.object({
+    password: z
+        .string()
+        .min(6, { message: "newPassword must be at least 6 characters long" })
+        .max(100, { message: "newPassword must not exceed 100 characters" })
+})

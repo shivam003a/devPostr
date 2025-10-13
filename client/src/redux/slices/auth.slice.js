@@ -65,6 +65,43 @@ export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
     }
 })
 
+export const changePassword = createAsyncThunk('auth/changePassword', async ({ oldPassword, newPassword }, thunkAPI) => {
+    try {
+        const response = await api.put('/api/settings/change-password', {
+            oldPassword,
+            newPassword
+        })
+        return response?.data?.message
+    } catch (e) {
+        const message = e?.response?.data?.message || "Something Went Wrong"
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+export const changeProfile = createAsyncThunk('auth/changeProfile', async ({ name }, thunkAPI) => {
+    try {
+        const response = await api.put('/api/settings/change-details', {
+            name
+        })
+        return response?.data?.data
+    } catch (e) {
+        const message = e?.response?.data?.message || "Something Went Wrong"
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+export const deleteAccount = createAsyncThunk('auth/deleteAccount', async ({ password }, thunkAPI) => {
+    try {
+        const response = await api.delete('/api/settings/delete-account', {
+            data: { password }
+        })
+        return response?.data?.message
+    } catch (e) {
+        const message = e?.response?.data?.message || "Something Went Wrong"
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
@@ -191,7 +228,7 @@ const authSlice = createSlice({
                 state.loading = false;
             })
 
-            // ✅ verifyOTP
+            // ✅ logOut
             .addCase(logout.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -217,6 +254,58 @@ const authSlice = createSlice({
 
                 localStorage.removeItem("otpInfo");
                 localStorage.removeItem("otpRequired");
+            })
+
+            // ✅ changePassword
+            .addCase(changePassword.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(changePassword.fulfilled, (state, action) => {
+                state.user = null;
+                state.error = null;
+                state.isAuthenticated = false;
+                state.otpInfo = null;
+                state.otpRequired = false;
+                state.loading = false;
+
+                localStorage.removeItem("otpInfo");
+                localStorage.removeItem("otpRequired");
+            })
+            .addCase(changePassword.rejected, (state, action) => {
+                state.error = action.payload;
+                state.otpInfo = null;
+                state.otpRequired = false;
+                state.loading = false;
+
+                localStorage.removeItem("otpInfo");
+                localStorage.removeItem("otpRequired");
+            })
+
+            // ✅ changePassword
+            .addCase(changeProfile.fulfilled, (state, action) => {
+                state.user = action.payload;
+            })
+            .addCase(changeProfile.rejected, (state, action) => {
+                state.error = action.payload;
+            })
+
+            // ✅ delete Account
+            .addCase(deleteAccount.pending, (state) => {
+                state.error = null;
+            })
+            .addCase(deleteAccount.fulfilled, (state, action) => {
+                state.user = null;
+                state.error = null;
+                state.isAuthenticated = false;
+                state.otpInfo = null;
+                state.otpRequired = false;
+
+                localStorage.removeItem("otpInfo");
+                localStorage.removeItem("otpRequired");
+            })
+            .addCase(deleteAccount.rejected, (state, action) => {
+                state.error = action.payload;
             })
 
     }
