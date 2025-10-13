@@ -11,11 +11,13 @@ function Setting() {
     const [profileEdit, setProfileEdit] = useState(false)
     const [name, setName] = useState('')
     const [profileErrors, setProfileErrors] = useState({})
+    const [profileLoading, setProfileLoading] = useState(false)
 
     const [passwordEdit, setPasswordEdit] = useState(false)
     const [oldPassword, setOldPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
     const [passErrors, setPassErrors] = useState({})
+    const [passLoading, setPassLoading] = useState(false)
 
     const [openModal, setOpenModal] = useState(false)
     const [deletePassword, setDeletePassword] = useState("")
@@ -37,14 +39,23 @@ function Setting() {
             return;
         }
         setPassErrors({})
+        if (name !== "" && name === user?.name) {
+            setProfileErrors((prev) => ({
+                ...prev, name: "Make some change to update"
+            }))
+            return;
+        }
 
+        setProfileLoading(true)
         const resultAction = await dispatch(changeProfile({ name }))
         if (changeProfile.fulfilled.match(resultAction)) {
+            setProfileErrors({})
             setProfileEdit(false)
             toast.success("Profile Update Successfully")
         } else {
             toast.error("Something Went Wrong")
         }
+        setProfileLoading(false)
     }
 
     const handlePasswordChange = async () => {
@@ -65,10 +76,12 @@ function Setting() {
             return;
         }
 
+        setPassLoading(true)
         const resultAction = await dispatch(changePassword({ oldPassword, newPassword }))
         if (changePassword.fulfilled.match(resultAction)) {
             setOldPassword('')
             setNewPassword('')
+            setPassErrors({})
             toast.success("Password changed successfully. Please log in again.")
             navigate('/login', { replace: true })
         }
@@ -79,6 +92,7 @@ function Setting() {
 
             toast.error(errorMsg)
         }
+        setPassLoading(false)
     }
 
     const handleAccountDelete = async () => {
@@ -109,6 +123,7 @@ function Setting() {
             setName(user?.name)
         }
     }, [user])
+
     return (
         <>
             <div className='w-full h-full flex flex-col relative p-4 overflow-x-hidden overflow-y-scroll'>
@@ -160,8 +175,9 @@ function Setting() {
                             profileEdit &&
                             <div className='flex gap-2 items-center justify-end'>
                                 <button
-                                    className='flex gap-2 items-center bg-white text-black font-semibold py-[6px] px-4 text-sm w-fit rounded-md mt-4 cursor-pointer'
+                                    className='flex gap-2 items-center bg-white text-black font-semibold py-[6px] px-4 text-sm w-fit rounded-md mt-4 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed'
                                     onClick={handleProfileChange}
+                                    disabled={profileLoading}
                                 >
                                     <CheckCheck size={15} />
                                     Save
@@ -227,8 +243,9 @@ function Setting() {
                             passwordEdit &&
                             <div className='flex gap-2 items-center justify-end'>
                                 <button
-                                    className='flex gap-2 items-center bg-white text-black font-semibold py-[6px] px-4 text-sm w-fit rounded-md mt-4 cursor-pointer'
+                                    className='flex gap-2 items-center bg-white text-black font-semibold py-[6px] px-4 text-sm w-fit rounded-md mt-4 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed'
                                     onClick={handlePasswordChange}
+                                    disabled={passLoading}
                                 >
                                     <CheckCheck size={15} />
                                     Save
