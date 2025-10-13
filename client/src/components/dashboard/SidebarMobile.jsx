@@ -9,8 +9,7 @@ import api from "../../lib/axiosInstance.js";
 import * as Popover from '@radix-ui/react-popover'
 import Modal from '../common/Modal.jsx'
 
-function Sidebar() {
-    const [showSidebar, setShowSidebar] = useState(true)
+function SidebarMobile({ showSidebar, setShowSidebar }) {
     const [batchLoading, setBatchLoading] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [open, setOpen] = useState(false)
@@ -133,7 +132,7 @@ function Sidebar() {
 
     return (
         <>
-            <div className={`bg-dark-blue h-dvh ${showSidebar ? "!w-[230px]" : "!w-[40px]"} h-full flex flex-col items-start justify-start py-3 cursor-pointer transition-all ease-linear duration-200`}>
+            <div className={`bg-dark-blue h-dvh absolute z-100 ${showSidebar ? "!w-[230px]" : "!w-[0px]"} h-full flex flex-col items-start justify-start py-3 cursor-pointer transition-all ease-linear duration-200 overflow-hidden`}>
                 {/* branding */}
                 <div className={`w-full flex items-center px-2 ${showSidebar ? "justify-between" : "justify-center"}`}>
                     {
@@ -159,53 +158,44 @@ function Sidebar() {
                         onClick={() => navigate('/dashboard')}
                     >
                         <SquarePlus size={20} color="#fff" />
-                        {
-                            showSidebar &&
-                            <span className="font-poppins text-sm font-light text-white">New</span>
-                        }
+                        <span className="font-poppins text-sm font-light text-white">New</span>
                     </div>
                     <div className={`w-full flex items-center justify-start gap-2 rounded-md`}
                         onClick={() => setOpen(!open)}
                     >
                         <Search size={20} color="#fff" />
-                        {
-                            showSidebar &&
-                            <span className="font-poppins text-sm font-light text-white">Search</span>
-                        }
+                        <span className="font-poppins text-sm font-light text-white">Search</span>
                     </div>
                 </div>
 
                 {/* batches */}
-                {
-                    showSidebar &&
-                    <div className="w-full h-full flex flex-col justify-start items-start gap-2 mt-6 overflow-hidden">
-                        <span className="text-sm font-poppins font-light text-gray px-2">Batches</span>
-                        <div className="w-full h-full flex-1 flex flex-col justify-start items-start px-2 gap-2 overflow-x-hidden overflow-y-auto">
-                            {
-                                batchLoading ? (<Loader color="#94a3b8" size={20} className="animate-spin" />) : (
-                                    batches && batches?.length > 0 && batches.map((batch) => {
-                                        const title = batch?.langauge + "-" + batch.prompt;
-                                        return (
+                <div className="w-full h-full flex flex-col justify-start items-start gap-2 mt-6 overflow-hidden">
+                    <span className="text-sm font-poppins font-light text-gray px-2">Batches</span>
+                    <div className="w-full h-full flex-1 flex flex-col justify-start items-start px-2 gap-2 overflow-x-hidden overflow-y-auto">
+                        {
+                            batchLoading ? (<Loader color="#94a3b8" size={20} className="animate-spin" />) : (
+                                batches && batches?.length > 0 && batches.map((batch) => {
+                                    const title = batch?.langauge + "-" + batch.prompt;
+                                    return (
+                                        <div
+                                            className="flex-shrink-0 flex gap-1 items-center justify-between w-full rounded-md text-white text-[13px] p-1 bg-[rgba(255,255,255,0.1)] hover:bg-[rgba(255,255,255,0.2)] overflow-hidden whitespace-nowrap"
+                                            key={batch?._id}
+                                            onClick={() => navigate(`/dashboard/${batch?._id}`)}
+                                            style={location?.pathname?.split('/')[2] === batch?._id ? { backgroundColor: " #3c83f6", color: "#000" } : {}}
+                                        >
+                                            <span>{title?.length > 30 ? title?.slice(0, 30) : title}</span>
                                             <div
-                                                className="flex-shrink-0 flex gap-1 items-center justify-between w-full rounded-md text-white text-[13px] p-1 bg-[rgba(255,255,255,0.1)] hover:bg-[rgba(255,255,255,0.2)] overflow-hidden whitespace-nowrap"
-                                                key={batch?._id}
-                                                onClick={() => navigate(`/dashboard/${batch?._id}`)}
-                                                style={location?.pathname?.split('/')[2] === batch?._id ? { backgroundColor: " #3c83f6", color: "#000" } : {}}
+                                                onClick={(e) => handleDeleteBatch(e, batch?._id)}
                                             >
-                                                <span>{title?.length > 30 ? title?.slice(0, 30) : title}</span>
-                                                <div
-                                                    onClick={(e) => handleDeleteBatch(e, batch?._id)}
-                                                >
-                                                    <Trash size={16} strokeWidth={1} />
-                                                </div>
+                                                <Trash size={16} strokeWidth={1} />
                                             </div>
-                                        )
-                                    })
-                                )
-                            }
-                        </div>
+                                        </div>
+                                    )
+                                })
+                            )
+                        }
                     </div>
-                }
+                </div>
 
                 {/* actions */}
                 <div
@@ -258,11 +248,7 @@ function Sidebar() {
                                 </div>
                             </Popover.Content>
                         </Popover.Root>
-                        {
-                            showSidebar &&
-                            <span className="text-white text-sm">{user?.name}</span>
-                        }
-
+                        <span className="text-white text-sm">{user?.name}</span>
                     </div>
                 </div>
 
@@ -310,4 +296,4 @@ function Sidebar() {
     )
 }
 
-export default Sidebar;
+export default SidebarMobile;
