@@ -120,7 +120,7 @@ function Register() {
                             <button className="w-full rounded-md mt-4 text-md font-semibold p-1 bg-gradient-to-tl from-light-blue-1 to-light-blue-2 disabled:bg-light-blue-1/80 cursor-pointer" disabled={loading}>{loading ? <Loader size={22} strokeWidth={1} className="animate-spin mx-auto" /> : "Register"}</button>
                         </form>
                         <p
-                            className="w-full text-end text-light-blue-1 font-light text-[10px] font-poppins -mt-2 hover:underline cursor-pointer"
+                            className="w-full text-end text-light-blue-1 font-light text-xs font-poppins -mt-2 hover:underline cursor-pointer"
                             onClick={() => setForgotPass(true)}
                         >
                             Forgot password?

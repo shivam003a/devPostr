@@ -120,7 +120,7 @@ function Login() {
                             Get Sample Credentials
                         </button>
                         <p
-                            className="w-full text-end text-light-blue-1 font-light text-[10px] font-poppins -mt-2 hover:underline cursor-pointer"
+                            className="w-full text-end text-light-blue-1 font-light text-xs font-poppins -mt-2 hover:underline cursor-pointer"
                             onClick={() => setForgotPass(true)}
                         >
                             Forgot password?
