@@ -52,7 +52,9 @@ function Dashboard() {
                             </NavLink>
                         </div>
                     }
-                    <Outlet />
+                    <div className="w-full h-full">
+                        <Outlet />
+                    </div>
                 </div>
             </div>
         </>

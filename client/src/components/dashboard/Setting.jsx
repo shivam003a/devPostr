@@ -268,7 +268,7 @@ function Setting() {
                 </div>
 
                 {/* account info */}
-                <div className='p-6 border border-red-500 rounded-lg mt-8 max-w-[720px]'>
+                <div className='p-6 border border-red-500 rounded-lg mt-8 max-w-[720px] mb-12'>
                     <h1 className='text-red-500 font-poppins text-lg'>Danger Zone</h1>
                     <p className='font-poppins text-xs text-light text-gray'>Permanently delete your account and all data</p>
 

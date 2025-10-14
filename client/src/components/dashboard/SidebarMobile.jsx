@@ -132,7 +132,7 @@ function SidebarMobile({ showSidebar, setShowSidebar }) {
 
     return (
         <>
-            <div className={`bg-dark-blue h-dvh absolute z-100 ${showSidebar ? "!w-[230px]" : "!w-[0px]"} h-full flex flex-col items-start justify-start py-3 cursor-pointer transition-all ease-linear duration-200 overflow-hidden`}>
+            <div className={`bg-dark-blue h-dvh absolute z-100 ${showSidebar ? "!w-[290px]" : "!w-[0px]"} h-full flex flex-col items-start justify-start py-3 cursor-pointer transition-all ease-linear duration-200 overflow-hidden`}>
                 {/* branding */}
                 <div className={`w-full flex items-center px-2 ${showSidebar ? "justify-between" : "justify-center"}`}>
                     {
