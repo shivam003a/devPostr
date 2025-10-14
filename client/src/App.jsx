@@ -15,6 +15,7 @@ import GeneratePost from './components/dashboard/GeneratePost.jsx'
 import PostsInterface from './components/dashboard/PostsInterface.jsx'
 import LostPage from './components/common/LostPage.jsx'
 import Setting from './components/dashboard/Setting.jsx'
+import ResetPassword from './pages/ResetPassword.jsx'
 
 function App() {
   const dispatch = useDispatch()
@@ -29,6 +30,7 @@ function App() {
         <Route index element={<Landing />} />
         <Route path={'/login'} element={<PublicRoute><Login /></PublicRoute>} />
         <Route path={'/register'} element={<PublicRoute><Register /></PublicRoute>} />
+        <Route path='/reset-password' element={<PublicRoute><ResetPassword /></PublicRoute>} />
         <Route path={'/verify-otp'} element={<OtpRoute><VerifyOTP /></OtpRoute>} />
         <Route path={'/dashboard'} element={<PrivateRoute><Dashboard /></PrivateRoute>} >
           <Route index element={<GeneratePost />} />

@@ -70,3 +70,24 @@ export const deleteAccountSchema = z.object({
         .min(6, { message: "Password must be at least 6 characters long" })
         .max(100, { message: "Password must be less than 100 characters" }),
 })
+
+export const forgotPasswordEmailSchema = z.object({
+    email: z
+        .string()
+        .email({ message: "Must be a valid email address" })
+})
+
+export const resetPasswordSchema = z.object({
+    password: z
+        .string()
+        .min(6, { message: "Password must be at least 6 characters long" })
+        .max(100, { message: "Password must not exceed 100 characters" }),
+    confirmPassword: z
+        .string()
+        .min(6, { message: "Password must be at least 6 characters long" })
+        .max(100, { message: "Password must not exceed 100 characters" }),
+})
+    .refine((data) => data.password === data.confirmPassword, {
+        message: "Passwords do not match",
+        path: ["confirmPassword"], // attaches error to confirmPassword field
+    });;

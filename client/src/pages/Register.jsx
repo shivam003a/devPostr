@@ -5,11 +5,13 @@ import { register } from "../redux/slices/auth.slice";
 import { useDispatch, useSelector } from "react-redux";
 import toast from 'react-hot-toast'
 import { registerSchema } from "../utils/zodSchema";
+import ForgotPasswordModal from "../components/common/ForgotPasswordModal";
 
 function Register() {
     const [user, setUser] = useState({ name: '', email: '', password: '' })
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({})
+    const [forgotPass, setForgotPass] = useState(false)
 
     const { loading } = useSelector(state => state.auth)
     const dispatch = useDispatch()
@@ -117,6 +119,12 @@ function Register() {
 
                             <button className="w-full rounded-md mt-4 text-md font-semibold p-1 bg-gradient-to-tl from-light-blue-1 to-light-blue-2 disabled:bg-light-blue-1/80 cursor-pointer" disabled={loading}>{loading ? <Loader size={22} strokeWidth={1} className="animate-spin mx-auto" /> : "Register"}</button>
                         </form>
+                        <p
+                            className="w-full text-end text-light-blue-1 font-light text-[10px] font-poppins -mt-2 hover:underline cursor-pointer"
+                            onClick={() => setForgotPass(true)}
+                        >
+                            Forgot password?
+                        </p>
 
                         <p className="text-gray-400 text-sm text-center mt-4">
                             Already have an account?{" "}
@@ -135,6 +143,11 @@ function Register() {
                 <NavLink to={'/'} className="absolute top-4 left-4 cursor-pointer border border-[rgba(255,255,255,0.2)] w-10 h-10 rounded-full flex items-center justify-center bg-[rgba(255,255,255,0.1)]">
                     <ArrowLeft size={16} color="#fff" />
                 </NavLink>
+
+                <ForgotPasswordModal
+                    forgotPass={forgotPass}
+                    setForgotPass={setForgotPass}
+                />
             </div>
         </>
     )

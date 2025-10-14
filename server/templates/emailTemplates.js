@@ -220,3 +220,244 @@ export const welcomeEmailTemplate = (name) => `
   </body>
 </html>
 `;
+
+
+export const forgotPasswordEmailTemplate = (name, resetLink) => `
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Reset Your Password | DevPostr</title>
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      font-family: 'Helvetica', Arial, sans-serif;
+      background-color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+    "
+  >
+    <div
+      style="
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        background-color: #ece9e9;
+        margin: 0 auto;
+        overflow: hidden;
+      "
+    >
+      <h1
+        style="
+          background-color: #3c83f6;
+          padding: 8px;
+          text-align: center;
+          color: #f5f5f4;
+          margin: 0;
+        "
+      >
+        DEVPOSTR
+      </h1>
+
+      <div style="overflow: hidden">
+        <h2 style="text-align: center; margin-top: 20px;">Reset Your Password</h2>
+
+        <p
+          style="
+            font-size: 16px;
+            line-height: 1.5;
+            text-align: center;
+            padding: 8px;
+          "
+        >
+          Hi ${name}, we received a request to reset your password for your DevPostr account.
+        </p>
+
+        <p
+          style="
+            font-size: 16px;
+            line-height: 1.5;
+            text-align: center;
+            padding: 8px;
+          "
+        >
+          Click the button below to reset your password. This link will expire in <strong>10 minutes</strong>.
+        </p>
+
+        <div style="width: 100%; text-align: center">
+          <a
+            href="${resetLink}"
+            style="
+              display: inline-block;
+              font-size: 16px;
+              font-weight: bold;
+              background-color: #3c83f6;
+              color: #ffffff;
+              padding: 15px 30px;
+              border-radius: 8px;
+              text-decoration: none;
+              margin: 20px 0;
+            "
+          >
+            Reset Password
+          </a>
+        </div>
+
+        <p
+          style="
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 8px;
+            color: #7e7e7e;
+            font-weight: lighter;
+            text-align: center;
+          "
+        >
+          ⚠️ <strong>Security tip:</strong> Do <u>not</u> share this link with anyone.
+          Only you should have access to it.
+        </p>
+
+        <p
+          style="
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 8px;
+            color: #7e7e7e;
+            font-weight: lighter;
+            text-align: center;
+          "
+        >
+          If you didn’t request this password reset, you can safely ignore this email — your password will remain unchanged.
+        </p>
+
+        <p
+          style="
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 8px;
+            color: #7e7e7e;
+            font-weight: lighter;
+            text-align: center;
+          "
+        >
+          If you need help, feel free to
+          <a
+            href="mailto:devpostr@gmail.com"
+            style="color: #0d6efd; text-decoration: none"
+            >contact us</a
+          >.
+        </p>
+
+        <div
+          style="
+            background-color: #f8f8f8;
+            padding: 20px;
+            color: #777777;
+            font-size: 12px;
+            text-align: center;
+            margin: 0;
+          "
+        >
+          <div style="text-align: center">
+            &copy; 2025 DevPostr. All rights reserved.
+          </div>
+          <a href="https://devpostr.vercel.app/" style="color: #0d6efd; text-decoration: none"
+            >Visit Site</a
+          >
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+`;
+
+export const passwordChangedEmailTemplate = (name) => `
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Password Changed | DevPostr</title>
+</head>
+<body
+  style="
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica', Arial, sans-serif;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  "
+>
+  <div
+    style="
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      background-color: #ece9e9;
+      margin: 0 auto;
+      overflow: hidden;
+    "
+  >
+    <h1
+      style="
+        background-color: #3c83f6;
+        padding: 8px;
+        text-align: center;
+        color: #f5f5f4;
+        margin: 0;
+      "
+    >
+      DEVPOSTR
+    </h1>
+
+    <div style="overflow: hidden">
+      <h2 style="text-align: center; margin-top: 20px;">Your Password Was Changed</h2>
+
+      <p
+        style="
+          font-size: 16px;
+          line-height: 1.5;
+          text-align: center;
+          padding: 8px;
+        "
+      >
+        Hi ${name}, your DevPostr account password was successfully changed.
+      </p>
+
+      <p
+        style="
+          font-size: 14px;
+          line-height: 1.5;
+          padding: 8px;
+          color: #7e7e7e;
+          font-weight: lighter;
+          text-align: center;
+        "
+      >
+        If you did not perform this action, please <a href="mailto:devpostr@gmail.com" style="color: #0d6efd; text-decoration: none">contact support immediately</a>.
+      </p>
+
+      <div
+        style="
+          background-color: #f8f8f8;
+          padding: 20px;
+          color: #777777;
+          font-size: 12px;
+          text-align: center;
+          margin: 0;
+        "
+      >
+        <div style="text-align: center">
+          &copy; 2025 DevPostr. All rights reserved.
+        </div>
+        <a href="https://devpostr.vercel.app/" style="color: #0d6efd; text-decoration: none">Visit Site</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+`;

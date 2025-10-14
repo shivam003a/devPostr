@@ -1,10 +1,11 @@
-import { sendOtpEmail, sendWelcomeEmail } from '../lib/nodemailer.lib.js';
+import { sendForgotPasswordEmail, sendOtpEmail, sendPasswordChangedEmail, sendWelcomeEmail } from '../lib/nodemailer.lib.js';
 import User from '../models/user.models.js';
 import { generateOtp } from '../utils/otpGen.utils.js';
 import { hashPassword, comparePassword } from '../utils/password.utils.js';
 import { generateToken } from '../utils/jwt.utils.js';
 import { cookieOptions } from '../utils/cookieOptions.js';
-import { loginSchema, registerSchema, verifyOtpSchema } from '../utils/zod.utils.js';
+import { forgotPasswordSchema, loginSchema, registerSchema, resetPasswordSchema, verifyOtpSchema } from '../utils/zod.utils.js';
+import crypto from 'node:crypto'
 
 export const register = async (req, res) => {
     try {
@@ -267,3 +268,89 @@ export const checkAuth = async (req, res) => {
         return res.error('Internal Server Error', null, 500);
     }
 };
+
+export const forgotPassword = async (req, res) => {
+    try {
+        // validate req.body
+        const parsed = forgotPasswordSchema?.safeParse(req.body)
+        if (!parsed?.success) {
+            const errorsMsg = parsed?.error?.issues.map((err) => err?.message).join(', ')
+            return res.error(errorsMsg, null, 400)
+        }
+        const { email } = parsed?.data;
+
+        // Find User if exist
+        const user = await User.findOne({ email, isVerified: true })
+        if (!user) {
+            return res.error("No user found", null, 404)
+        }
+
+        // make token and expiry
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+
+        // update db
+        user.forgotPasswordToken = hashedToken;
+        user.forgotPasswordTokenExpiry = Date.now() + 10 * 60 * 1000;
+        await user.save();
+
+        const resetLink = `${process.env.FE_URL}/reset-password?token=${resetToken}`;
+        sendForgotPasswordEmail(user?.email, user?.name, resetLink);
+
+        const { httpOnly, secure, sameSite, path } = cookieOptions();
+        res.clearCookie('token', {
+            httpOnly,
+            secure,
+            sameSite,
+            path,
+        });
+
+        return res.success("Password reset link sent to your email", null, 200);
+    } catch (e) {
+        console.error(e?.message || 'Internal Server Error');
+        return res.error('Internal Server Error', null, 500);
+    }
+}
+
+export const resetPassword = async (req, res) => {
+    try {
+        // validate req.body
+        const parsed = resetPasswordSchema?.safeParse(req.body)
+        if (!parsed?.success) {
+            const errorsMsg = parsed?.error?.issues.map((err) => err?.message).join(', ')
+            return res.error(errorsMsg, null, 400)
+        }
+        const { password, token } = parsed?.data;
+        const hashedToken = crypto.createHash("sha256").update(token).digest("hex")
+
+        const user = await User.findOne({
+            forgotPasswordToken: hashedToken,
+            forgotPasswordTokenExpiry: { $gt: Date.now() }
+        })
+        if (!user) {
+            return res.error("Invalid or expired token", null, 400)
+        }
+
+        const hashedPassword = await hashPassword(password);
+        user.password = hashedPassword;
+        user.forgotPasswordToken = null;
+        user.forgotPasswordTokenExpiry = null;
+        await user.save();
+
+        sendPasswordChangedEmail(user?.email, user?.name)
+
+        const { httpOnly, secure, sameSite, path } = cookieOptions();
+        res.clearCookie('token', {
+            httpOnly,
+            secure,
+            sameSite,
+            path,
+        });
+
+        return res.success("Password has been reset successfully", null, 200);
+
+    } catch (e) {
+        console.error(e?.message || 'Internal Server Error');
+        return res.error('Internal Server Error', null, 500);
+    }
+}

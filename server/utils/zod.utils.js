@@ -94,3 +94,17 @@ export const deleteAccountSchema = z.object({
         .min(6, { message: "newPassword must be at least 6 characters long" })
         .max(100, { message: "newPassword must not exceed 100 characters" })
 })
+
+export const forgotPasswordSchema = z.object({
+    email: z
+        .string()
+        .email({ message: "Please provide a valid email address" })
+})
+
+export const resetPasswordSchema = z.object({
+    password: z
+        .string()
+        .min(6, { message: "newPassword must be at least 6 characters long" })
+        .max(100, { message: "newPassword must not exceed 100 characters" }),
+    token: z.string().nonempty("Invalid or missing token"),
+});
