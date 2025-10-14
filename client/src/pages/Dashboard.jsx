@@ -3,7 +3,7 @@ import Sidebar from "../components/dashboard/Sidebar";
 import SidebarMobile from "../components/dashboard/SidebarMobile";
 import { Outlet } from "react-router-dom";
 import { NavLink } from 'react-router-dom'
-import { PanelRight } from 'lucide-react'
+import { PanelRight, Code } from 'lucide-react'
 
 function Dashboard() {
     const [isMobile, setIsMobile] = useState(false);
@@ -41,15 +41,19 @@ function Dashboard() {
                 <div className="overflow-hidden bg-light-blue/95 w-full h-full relative">
                     {
                         isMobile &&
-                        <div className="bg-dark-blue h-11 p-2 flex justify-start items-center gap-2">
+                        <div className="bg-dark-blue h-11 p-2 flex justify-between items-center gap-2">
                             <div
                                 onClick={() => setShowSidebar((prev) => !prev)}
                             >
                                 <PanelRight size={20} color="#fff" />
                             </div>
                             <NavLink to={'/'} className="flex items-center gap-1">
+                                <div className="bg-gradient-to-tr from-light-blue-1 to-light-blue-2 p-1 rounded-lg">
+                                    <Code size={16} color="#ffffff" />
+                                </div>
                                 <span className="text-white font-poppins text-md font-semibold">devPostr</span>
                             </NavLink>
+                            <div className="opacity-0"><PanelRight size={20} color="#fff" /></div>
                         </div>
                     }
                     <div className="w-full h-full">
