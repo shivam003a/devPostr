@@ -33,7 +33,7 @@ export const getAiResponseByPrompt = async (systemPrompt, userPrompt) => {
             .replace(/\r?\n/g, " ")
 
         let posts;
-        posts = jsonrepair(jsonString);
+        // posts = jsonrepair(jsonString);
 
         try {
             posts = parse(jsonString);
