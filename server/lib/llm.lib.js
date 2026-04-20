@@ -1,5 +1,6 @@
 import { jsonrepair } from 'jsonrepair'
 import { SarvamAIClient} from 'sarvamai'
+import {parse} from 'tolerant-json-parser'
 
 const client = new SarvamAIClient({
     apiSubscriptionKey: process.env.SARVAM_API
@@ -35,7 +36,7 @@ export const getAiResponseByPrompt = async (systemPrompt, userPrompt) => {
         posts = jsonrepair(jsonString);
 
         try {
-            posts = JSON.parse(jsonString);
+            posts = parse(jsonString);
         } catch (e) {
             console.error("❌ Failed to parse AI response:", e.message);
             console.error("Raw JSON string:", posts);
