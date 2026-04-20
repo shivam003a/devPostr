@@ -9,7 +9,7 @@ const client = new SarvamAIClient({
 export const getAiResponseByPrompt = async (systemPrompt, userPrompt) => {
     try {
         const response = await client.chat.completions({
-            model: 'sarvam-105b',
+            model: 'sarvam-30b',
             messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: userPrompt },
@@ -33,10 +33,10 @@ export const getAiResponseByPrompt = async (systemPrompt, userPrompt) => {
             .replace(/\r?\n/g, " ")
 
         let posts;
-        // posts = jsonrepair(jsonString);
+        posts = jsonrepair(jsonString);
 
         try {
-            posts = parse(jsonString);
+            posts = parse(posts);
         } catch (e) {
             console.error("❌ Failed to parse AI response:", e.message);
             console.error("Raw JSON string:", posts);
