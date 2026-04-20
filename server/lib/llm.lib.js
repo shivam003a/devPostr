@@ -1,25 +1,30 @@
 import OpenAI from 'openai';
 import { jsonrepair } from 'jsonrepair'
+import { SarvamAIClient} from 'sarvamai'
 
-const client = new OpenAI({
-    apiKey: process.env.TOGETHER_AI_API,
-    baseURL: 'https://api.together.xyz/v1',
+const clientS = new OpenAI({
+    apiKey: process.env.OPENROUTER_API_KEY,
+    baseURL: 'https://openrouter.ai/api/v1',
 });
+
+const client = new SarvamAIClient({
+    apiSubscriptionKey: process.env.SARVAM_API
+})
 
 export const getAiResponseByPrompt = async (systemPrompt, userPrompt) => {
     try {
-        const response = await client.chat.completions.create({
-            model: 'mistralai/Mistral-Small-24B-Instruct-2501',
+        const response = await client.chat.completions({
+            model: 'sarvam-105b',
             messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: userPrompt },
             ],
             temperature: 0.7,
-            max_completion_tokens: 1500,
+            reasoning_effort: 'low',
+            max_tokens: 4000,
         });
-
+        
         let raw = response?.choices[0]?.message?.content || "";
-
         // 1. Strip markdown code fences
         raw = raw.replace(/```json|```/g, "").trim();
 
