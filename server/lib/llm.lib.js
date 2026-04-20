@@ -1,11 +1,5 @@
-import OpenAI from 'openai';
 import { jsonrepair } from 'jsonrepair'
 import { SarvamAIClient} from 'sarvamai'
-
-const clientS = new OpenAI({
-    apiKey: process.env.OPENROUTER_API_KEY,
-    baseURL: 'https://openrouter.ai/api/v1',
-});
 
 const client = new SarvamAIClient({
     apiSubscriptionKey: process.env.SARVAM_API
